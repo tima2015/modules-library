@@ -1,13 +1,10 @@
 plugins {
     id 'java'
     id "io.github.tomtzook.gradle-cmake" version "1.0.0"
-    id 'application'
 }
 
 group 'ru.funnydwarf.iot.nml'
 version '1.0-SNAPSHOT'
-
-application.mainClass = 'ru.funnydwarf.iot.nml.Testy'
 
 repositories {
     mavenCentral()

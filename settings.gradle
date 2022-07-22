@@ -1,2 +1,3 @@
 rootProject.name = 'NativeModuleLibrary'
+include 'LibraryTester'
 
