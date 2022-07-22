@@ -17,10 +17,6 @@ dependencies {
 
 }
 
-test {
-    useJUnitPlatform()
-}
-
 machines.customMachines.register("linux-aarch64") {
     it.toolchainFile.set(project.file('JNI-Library/aarch64-linux-gnu-gcc.cmake'))
 }
