@@ -1,12 +1,17 @@
 #####IDE#####
 
-.idea
+/.idea/
+/JNI-Library/.idea/
+/JNI-Library/cmake-build-debug/
+
 
 #####GRADLE#####
 
 .gradle
 **/build/
 !src/**/build/
+gradlew.bat
+gradlew
 
 # Ignore Gradle GUI config
 gradle-app.setting
