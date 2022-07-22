@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id "io.github.tomtzook.gradle-cmake" version "1.0.0"
+    id 'application'
+}
+
+group 'ru.funnydwarf.iot.nml'
+version '1.0-SNAPSHOT'
+
+application.mainClass = 'ru.funnydwarf.iot.nml.Testy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+machines.customMachines.register("linux-aarch64") {
+    it.toolchainFile.set(project.file('JNI-Library/aarch64-linux-gnu-gcc.cmake'))
+}
+
+def compileMachineTargets = []
+compileMachineTargets.addAll(machines.customMachines)
+
+cmake {
+    targets {
+        jni_library {
+            cmakeLists.set(file('JNI-Library/CMakeLists.txt'))
+            targetMachines.set(compileMachineTargets)
+        }
+    }
+}
+
+tasks.clean.dependsOn tasks.cmakeClean
+tasks.build.dependsOn tasks.cmakeBuild
