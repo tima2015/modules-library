@@ -101,10 +101,10 @@ public class Pin {
         if (mode == PinMode.UNKNOWN) {
             return;
         }
-        setMode(wiringPiNumber, mode);
+        setMode(wiringPiNumber, mode.code);
     }
 
-    private static native void setMode(int number, PinMode mode);
+    private static native void setMode(int number, int modeCode);
 
     public String getName() {
         return name;
