@@ -43,10 +43,15 @@ public class Pin {
      * Поле value содержит численую интерпритацию перечисления
      */
     public enum PinMode {
-        NONE(0),
-        UNKNOWN(1),
-        OUTPUT(2),
-        INPUT(3);
+        NONE(-2),
+        UNKNOWN(-1),
+        INPUT(0),
+        OUTPUT(1),
+        PWM_OUTPUT(2),
+        GPIO_CLOCK(3),
+        SOFT_PWM_OUTPUT(4),
+        SOFT_TONE_OUTPUT(5),
+        PWM_TONE_OUTPUT(6);
 
         public final int code;
 
@@ -71,7 +76,7 @@ public class Pin {
         mode = type == PinType.GPIO ? PinMode.UNKNOWN : PinMode.NONE;
     }
 
-    public void updateMode() {
+    /*public void updateMode() {
         if (type != PinType.GPIO) {
             return;
         }
@@ -85,7 +90,7 @@ public class Pin {
         }
     }
 
-    private static native int updateMode(int number);
+    private static native int updateMode(int number);*/
 
     void setMode(PinMode mode) throws WrongPinModeException {
         if (type != PinType.GPIO) {

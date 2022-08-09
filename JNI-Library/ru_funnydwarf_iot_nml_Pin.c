@@ -1,14 +1,5 @@
 #include "ru_funnydwarf_iot_nml_Pin.h"
-
-/*
- * Class:     ru_funnydwarf_iot_nml_Pin
- * Method:    updateMode
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_ru_funnydwarf_iot_nml_Pin_updateMode
-  (JNIEnv *env, jclass jc, jint portNumber){
-
-}
+#include <wiringPi.h>
 
 /*
  * Class:     ru_funnydwarf_iot_nml_Pin
@@ -16,6 +7,6 @@ JNIEXPORT jint JNICALL Java_ru_funnydwarf_iot_nml_Pin_updateMode
  * Signature: (ILru/funnydwarf/iot/nml/Pin/PinMode;)V
  */
 JNIEXPORT void JNICALL Java_ru_funnydwarf_iot_nml_Pin_setMode
-  (JNIEnv *, jclass, jint portNumber, jint modeCode){
-
+  (JNIEnv *env, jclass jc, jint pin, jint modeCode){
+    pinMode(pin, modeCode);
 }

@@ -13,7 +13,7 @@ extern "C" {
  * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_ru_funnydwarf_iot_nml_PinDigitalWriter_digitalWrite
-  (JNIEnv *env, jclass jc, jint portNumber);
+  (JNIEnv *env, jclass jc, jint pin, jint value);
 
 #ifdef __cplusplus
 }
