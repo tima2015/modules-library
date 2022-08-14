@@ -1,0 +1,67 @@
+{
+  "modules" : [ {
+    "type" : "Output",
+    "pin" : {
+      "type" : "GPIO",
+      "number" : 0
+    },
+    "name" : "beeper",
+    "description" : "Тестовая пищалка",
+    "userCustomName" : "какоето имя заданое пользователем или кем нибудь ещё",
+    "userCustomDescription" : "Какоето описание кем-то заданое. Для реле не хватает напряжения на пинах... вроде"
+  }, {
+    "type" : "Output",
+    "pin" : {
+      "type" : "GPIO",
+      "number" : 1
+    },
+    "name" : "LED",
+    "description" : "Тестовый светодиодик =)",
+    "userCustomName" : "",
+    "userCustomDescription" : ""
+  }, {
+    "type" : "OneWire",
+    "pin" : {
+      "type" : "GPIO",
+      "number" : 6
+    },
+    "name" : "oneWire0",
+    "description" : "Тестовый oneWire",
+    "userCustomName" : "",
+    "userCustomDescription" : "",
+    "oneWireUnits" : [ {
+      "type" : "DS18B20",
+      "pin" : {
+        "type" : "GPIO",
+        "number" : 6
+      },
+      "name" : "temperature0",
+      "description" : "Тестовый термометр",
+      "userCustomName" : "",
+      "userCustomDescription" : "",
+      "id" : "28-0316a006c5ff"
+    }, {
+      "type" : "DS18B20",
+      "pin" : {
+        "type" : "GPIO",
+        "number" : 6
+      },
+      "name" : "temperature1",
+      "description" : "Тестовый термометр",
+      "userCustomName" : "",
+      "userCustomDescription" : "",
+      "id" : "28-0316a006c5f0"
+    }, {
+      "type" : "Unknown",
+      "pin" : {
+        "type" : "GPIO",
+        "number" : 6
+      },
+      "name" : "Unknown",
+      "description" : "Something",
+      "userCustomName" : "",
+      "userCustomDescription" : "",
+      "id" : "28-0316a006c5f9"
+    } ]
+  } ]
+}

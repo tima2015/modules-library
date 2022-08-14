@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module type="Output">
+        <pin>2</pin>
+        <name>Реле</name>
+        <description>Просто реле, тут находится для простеньково теста</description>
+    </module>
+    <module type="Output">
+        <pin>3</pin>
+        <name>LED</name>
+        <description>Простой светодиод, нужен только для теста</description>
+    </module>
+    <module type="OneWire">
+        <pin>4</pin>
+        <name>OneWire</name>
+        <description>Тестовая сеть OneWire</description>
+        <subModules>
+            <subModule type="DS18B20">
+                <name>Датчик температуры №1</name>
+                <description>Тестовый датчик, с ним все должно быть ОК</description>
+            </subModule>
+            <subModule type="DS18B20">
+                <name>Датчик температуры №2</name>
+                <description>А вот этот датчик не будет подключен, должен быть NOT_FOUND</description>
+            </subModule>
+            <subModule type="SOMETHING">
+                <name>LOL</name>
+                <description>KEK</description>
+            </subModule>
+        </subModules>
+    </module>
+</modules>
