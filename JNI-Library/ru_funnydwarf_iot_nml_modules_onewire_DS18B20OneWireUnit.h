@@ -10,18 +10,18 @@ extern "C" {
 /*
  * Class:     ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit
  * Method:    takeMeasurements
- * Signature: (I)V
+ * Signature: (IJ)V
  */
 JNIEXPORT void JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit_takeMeasurements
-  (JNIEnv *env, jclass jc, jint pin);
+        (JNIEnv *env, jclass jc, jint pin, jlong rom);
 
 /*
  * Class:     ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit
  * Method:    getTemperatureFromUnit
- * Signature: (I)S
+ * Signature: (IJ)S
  */
 JNIEXPORT jshort JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit_getTemperatureFromUnit
-  (JNIEnv *env, jclass jc, jint pin);
+        (JNIEnv *env, jclass jc, jint pin,jlong rom);
 
 #ifdef __cplusplus
 }

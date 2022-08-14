@@ -11,7 +11,10 @@
 
 #ifndef JNI_LIBRARY_ONEWIREUTILS_H
 #define JNI_LIBRARY_ONEWIREUTILS_H
+
 #include <jni.h>
+#include <stdint.h>
+
 
 #define CMD_CONVERTTEMP    0x44
 #define CMD_RSCRATCHPAD    0xbe
@@ -28,27 +31,27 @@
  * В документации процесс сброса описывается на странице 24
  * @return 1 если был ответ от дачтика, 0 если ответа небыло
  */
-int reset(jint pin);
+int reset(int pin);
 
 /**
  * отправить один бит
  */
-void writeBit(jint pin, jbyte bit);
+void writeBit(int pin, int bit);
 
 /**
  * отправить один байт
  */
-void writeByte(jint pin, jbyte byte);
+void writeByte(int pin, int byte);
 
 /**
  * получить один байт
  */
-jbyte OneWire::readByte()
+int readByte(int pin);
 
 /**
  * получить один бит
  */
-jbyte OneWire::readBit()
+int readBit(int pin);
 
 
 /**
@@ -56,12 +59,12 @@ jbyte OneWire::readBit()
  * кода ROM на 64 бита позволяет устройству управления шиной
  * обращаться к определенному подчиненному устройству на шине.
  */
-void setDevice(jlong rom);
+void setDevice(int pin, int64_t rom);
 
 /**
  * пропустить ROM
  * Используется для передачи функциональной команды сразу всем устройствам сети
  */
-void skipRom();
+void skipRom(int pin);
 
 #endif

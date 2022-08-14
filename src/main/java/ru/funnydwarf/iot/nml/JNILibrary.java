@@ -21,6 +21,12 @@ public class JNILibrary {
         public ArrayList<Module> getModules() {
             return modules;
         }
+        @Override
+        public String toString() {
+            return "Modules{" +
+                    "modules=" + modules +
+                    '}';
+        }
     }
 
     private static native void wiringPiSetup();

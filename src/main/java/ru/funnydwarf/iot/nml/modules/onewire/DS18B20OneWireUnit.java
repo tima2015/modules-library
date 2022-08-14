@@ -22,15 +22,23 @@ public class DS18B20OneWireUnit extends OneWireUnit {
         super(pin, name, description, userCustomName, userCustomDescription, rom);
     }
 
-    private static native void takeMeasurements(int pin);
+    private static native void takeMeasurements(int pin, long rom);
 
     public double takeMeasurementsAndGetResult() {
-        return 0;
+        takeMeasurements(getPin().getNumber(), getRom());
+        return getTemperatureFromLastMeasurements();
     }
 
-    private static native short getTemperatureFromUnit(int pin);
+    private static native short getTemperatureFromUnit(int pin, long rom);
 
     public double getTemperatureFromLastMeasurements() {
-        return 0;
+        return getTemperatureFromUnit(getPin().getNumber(), getRom()) * 0.0625;
+    }
+
+    @Override
+    public String toString() {
+        return "DS18B20OneWireUnit{" +
+                "temperatureFromLastMeasurements=" + temperatureFromLastMeasurements +
+                "} " + super.toString();
     }
 }

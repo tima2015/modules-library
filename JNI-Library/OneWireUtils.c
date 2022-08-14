@@ -1,9 +1,7 @@
 #include "OneWireUtils.h"
 #include <wiringPi.h>
-#include <stdexcept>
-#include <iostream>
 
-int reset(jint pin) {
+int reset(int pin) {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
     delayMicroseconds(480);
@@ -17,7 +15,7 @@ int reset(jint pin) {
     return response;
 }
 
-void writeBit(jint pin, jbyte bit) {
+void writeBit(int pin, int bit) {
     if (bit & 1) {
         // логический «0» на 10us
         pinMode(pin, OUTPUT);
@@ -35,25 +33,25 @@ void writeBit(jint pin, jbyte bit) {
     }
 }
 
-void writeByte(jint pin, jbyte byte) {
-    jbyte i = 8;
+void writeByte(int pin, int byte) {
+    int i = 8;
     while (i--) {
         writeBit(pin, byte & 1);
         byte >>= 1;
     }
 }
 
-jbyte readByte() {
-    jbyte i = 8, byte = 0;
+int readByte(int pin) {
+    int i = 8, byte = 0;
     while (i--) {
         byte >>= 1;
-        byte |= (readBit() << 7);
+        byte |= (readBit(pin) << 7);
     }
     return byte;
 }
 
-jbyte readBit() {
-    jbyte bit = 0;
+int readBit(int pin) {
+    int bit = 0;
     // логический «0» на 3us
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
@@ -71,17 +69,17 @@ jbyte readBit() {
     return bit;
 }
 
-void setDevice(jlong rom) {
-    jbyte i = 64;
-    reset();
-    writeByte (CMD_MATCHROM);
+void setDevice(int pin, int64_t rom) {
+    int8_t i = 64;
+    reset(pin);
+    writeByte(pin, CMD_MATCHROM);
     while (i--) {
-        writeBit(rom & 1);
+        writeBit(pin, rom & 1);
         rom >>= 1;
     }
 }
 
-void skipRom() {
-    reset();
-    writeByte(CMD_SKIPROM);
+void skipRom(int pin) {
+    reset(pin);
+    writeByte(pin, CMD_SKIPROM);
 }

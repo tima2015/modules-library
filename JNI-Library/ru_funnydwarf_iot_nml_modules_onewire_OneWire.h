@@ -14,16 +14,16 @@ extern "C" {
  * Signature: (IJI)[J
  */
 JNIEXPORT jlongArray JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_OneWire_searchNextAddress
-  (JNIEnv *env, jclass jc, jint pin, jlong lastAddress, jlong lastDiscrepancy);
+        (JNIEnv *env, jclass jc, jint pin, jlong lastAddress, jlong lastDiscrepancy);
 
 
 /*
  * Class:     ru_funnydwarf_iot_nml_modules_onewire_OneWire
  * Method:    readRom
- * Signature: ()J
+ * Signature: (I)J
  */
 JNIEXPORT jlong JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_OneWire_readRom
-  (JNIEnv *env, jclass jc);
+        (JNIEnv *env, jclass jc, jint pin);
 
 #ifdef __cplusplus
 }

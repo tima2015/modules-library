@@ -61,5 +61,14 @@ public abstract class Module {
         this.userCustomDescription = userCustomDescription;
     }
 
-
+    @Override
+    public String toString() {
+        return "Module{" +
+                "pin=" + pin +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", userCustomName='" + userCustomName + '\'' +
+                ", userCustomDescription='" + userCustomDescription + '\'' +
+                '}';
+    }
 }

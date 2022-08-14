@@ -13,7 +13,7 @@ extern "C" {
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_ru_funnydwarf_iot_nml_JNILibrary_wiringPiSetup
-  (JNIEnv *env, jclass js);
+        (JNIEnv *env, jclass js);
 
 #ifdef __cplusplus
 }

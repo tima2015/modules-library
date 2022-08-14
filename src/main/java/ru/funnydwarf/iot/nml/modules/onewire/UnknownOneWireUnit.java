@@ -17,4 +17,9 @@ public class UnknownOneWireUnit extends OneWireUnit{
                               @JsonProperty("rom") long rom) {
         super(pin, name, description, userCustomName, userCustomDescription, rom);
     }
+
+    @Override
+    public String toString() {
+        return "UnknownOneWireUnit{} " + super.toString();
+    }
 }

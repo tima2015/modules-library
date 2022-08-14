@@ -28,7 +28,7 @@ public class TestJSON {
 
         Pin oneWirePin = new Pin(PinType.GPIO, 3);
         OneWireUnit[] oneWireUnits = new OneWireUnit[]{
-                new DS18B20OneWireUnit(oneWirePin, "temperature0", "Тестовый термометр", 0x28FFC506A01603E3L),
+                new DS18B20OneWireUnit(oneWirePin, "temperature0", "Тестовый термометр", 0x280316a006c5ffL),
                 new DS18B20OneWireUnit(oneWirePin, "temperature1", "Тестовый термометр", Long.parseLong("28FFC506A01603E2", 16)),
                 new UnknownOneWireUnit(oneWirePin, "Unknown", "Something", Long.parseLong("28FFC506A01613E3", 16))
         };

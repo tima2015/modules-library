@@ -7,6 +7,7 @@ import ru.funnydwarf.iot.nml.Pin;
 import ru.funnydwarf.iot.nml.modules.Module;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OneWire extends Module implements Initializable {
 
@@ -34,7 +35,11 @@ public class OneWire extends Module implements Initializable {
 
     @Override
     public void initialize(){
-        ArrayList<Long> roms = searchRoms();
+        ArrayList<Long> roms = new ArrayList<>();
+        long e = readRom(getPin().getNumber());
+        System.out.println(Long.toHexString(e));
+        roms.add(e);//searchRoms();
+        System.out.println(roms);
         OneWireUnit.State state;
         for (OneWireUnit unit : oneWireUnits) {
             state = OneWireUnit.State.NOT_FOUND;
@@ -98,6 +103,10 @@ public class OneWire extends Module implements Initializable {
             do {
                 try{
                     long[] searchResult = searchNextAddress(getPin().getNumber(), lastAddress, lastDiscrepancy);
+                    if (searchResult == null) {
+                        throw new RuntimeException("Something wrong with one wire! check logs");
+                    }
+                    System.out.println(Arrays.toString(searchResult));
                     lastAddress = searchResult[0];
                     lastDiscrepancy = searchResult[1];
                     int crc = checkingCyclicRedundancyCheck(lastAddress, 8);
@@ -123,6 +132,12 @@ public class OneWire extends Module implements Initializable {
      * Только если к шине подключено одно устройство!
      * @return ROM подчиненного устройства (код 64 бита)
      */
-    private static native long readRom();
+    private static native long readRom(int pin);
 
+    @Override
+    public String toString() {
+        return "OneWire{" +
+                "oneWireUnits=" + Arrays.toString(oneWireUnits) +
+                "} " + super.toString();
+    }
 }

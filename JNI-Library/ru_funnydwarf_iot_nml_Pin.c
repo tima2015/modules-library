@@ -7,6 +7,6 @@
  * Signature: (ILru/funnydwarf/iot/nml/Pin/PinMode;)V
  */
 JNIEXPORT void JNICALL Java_ru_funnydwarf_iot_nml_Pin_setMode
-  (JNIEnv *env, jclass jc, jint pin, jint modeCode){
+        (JNIEnv *env, jclass jc, jint pin, jint modeCode) {
     pinMode(pin, modeCode);
 }

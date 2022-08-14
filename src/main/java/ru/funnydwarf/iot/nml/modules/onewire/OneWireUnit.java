@@ -52,4 +52,12 @@ public abstract class OneWireUnit extends Module{
     public long getRom() {
         return rom;
     }
+
+    @Override
+    public String toString() {
+        return "OneWireUnit{" +
+                "state=" + state +
+                ", rom=" + rom +
+                "} " + super.toString();
+    }
 }

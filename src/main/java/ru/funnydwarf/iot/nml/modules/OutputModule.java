@@ -42,4 +42,11 @@ public class OutputModule extends Module{
     }
 
     private static native void digitalWrite(int pin, int value);
+
+    @Override
+    public String toString() {
+        return "OutputModule{" +
+                "currentState=" + currentState +
+                "} " + super.toString();
+    }
 }
