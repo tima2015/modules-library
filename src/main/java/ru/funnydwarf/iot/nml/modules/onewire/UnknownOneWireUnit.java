@@ -5,7 +5,7 @@ import ru.funnydwarf.iot.nml.Pin;
 
 public class UnknownOneWireUnit extends OneWireUnit{
 
-    public UnknownOneWireUnit(Pin pin, String name, String description, long rom) {
+    public UnknownOneWireUnit(Pin pin, String name, String description, String rom) {
         super(pin, name, description, rom);
     }
 
@@ -14,7 +14,7 @@ public class UnknownOneWireUnit extends OneWireUnit{
                               @JsonProperty("description") String description,
                               @JsonProperty("userCustomName") String userCustomName,
                               @JsonProperty("userCustomDescription") String userCustomDescription,
-                              @JsonProperty("rom") long rom) {
+                              @JsonProperty("rom") String rom) {
         super(pin, name, description, userCustomName, userCustomDescription, rom);
     }
 

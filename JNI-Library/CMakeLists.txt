@@ -11,16 +11,10 @@ include_directories("${JAVA_HOME}/include" "${JAVA_HOME}/include/linux" "/usr/lo
 
 add_library(JNI_Library SHARED
         test.c
-        OneWireUtils.h
-        OneWireUtils.c
         ru_funnydwarf_iot_nml_Pin.h
         ru_funnydwarf_iot_nml_Pin.c
         ru_funnydwarf_iot_nml_modules_OutputModule.h
         ru_funnydwarf_iot_nml_modules_OutputModule.c
-        ru_funnydwarf_iot_nml_modules_onewire_OneWire.h
-        ru_funnydwarf_iot_nml_modules_onewire_OneWire.c
-        ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit.h
-        ru_funnydwarf_iot_nml_modules_onewire_DS18B20OneWireUnit.c
         ru_funnydwarf_iot_nml_JNILibrary.h
         ru_funnydwarf_iot_nml_JNILibrary.c)
 

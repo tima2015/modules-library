@@ -21,17 +21,16 @@ public class Main {
         try {
             JNILibrary.Modules modules = JNILibrary.initialize(new File("modules.json"));
             System.out.println(modules.toString());
-            /*
             for (Module module : modules.getModules()) {
                 if (Objects.equals(module.getName(), "oneWire0")){
                     OneWire oneWire = (OneWire) module;
                     for (OneWireUnit oneWireUnit : oneWire.getOneWireUnits()) {
-                        if (oneWireUnit.getRom() == -2088730556861382872L){
+                        if (oneWireUnit.getId().equals("28-0316a006c5ff")){
                             DS18B20OneWireUnit ds = (DS18B20OneWireUnit) oneWireUnit;
-                            for (int i = 0; i < 10; i++) {
-                                System.out.println(ds.takeMeasurementsAndGetResult());
+                            for (int i = 0; i < 20; i++) {
+                                System.out.println(ds.takeMeasurements());
                                 try {
-                                    Thread.sleep(250);
+                                    Thread.sleep(500);
                                 } catch (InterruptedException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -41,7 +40,6 @@ public class Main {
                     break;
                 }
             }
-            */
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

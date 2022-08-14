@@ -4,13 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.funnydwarf.iot.nml.Pin;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 public class DS18B20OneWireUnit extends OneWireUnit {
 
     @JsonIgnore
-    private final double temperatureFromLastMeasurements = Double.NaN;
+    private final String modulePath;
 
-    public DS18B20OneWireUnit(Pin pin, String name, String description, long rom) {
-        super(pin, name, description, rom);
+    public DS18B20OneWireUnit(Pin pin, String name, String description, String id) {
+        super(pin, name, description, id);
+        modulePath = OneWire.ONE_WIRE_ROOT_PATH + id + '/';
     }
 
     public DS18B20OneWireUnit(@JsonProperty("pin") Pin pin,
@@ -18,27 +23,26 @@ public class DS18B20OneWireUnit extends OneWireUnit {
                               @JsonProperty("description") String description,
                               @JsonProperty("userCustomName") String userCustomName,
                               @JsonProperty("userCustomDescription") String userCustomDescription,
-                              @JsonProperty("rom") long rom) {
-        super(pin, name, description, userCustomName, userCustomDescription, rom);
+                              @JsonProperty("id") String id) {
+        super(pin, name, description, userCustomName, userCustomDescription, id);
+        modulePath = OneWire.ONE_WIRE_ROOT_PATH + id + '/';
     }
 
-    private static native void takeMeasurements(int pin, long rom);
-
-    public double takeMeasurementsAndGetResult() {
-        takeMeasurements(getPin().getNumber(), getRom());
-        return getTemperatureFromLastMeasurements();
-    }
-
-    private static native short getTemperatureFromUnit(int pin, long rom);
-
-    public double getTemperatureFromLastMeasurements() {
-        return getTemperatureFromUnit(getPin().getNumber(), getRom()) * 0.0625;
+    public double takeMeasurements() {
+        try {
+            String result = Files.readString(new File(modulePath + "/w1_slave").toPath());
+            String temperature = result.substring(result.lastIndexOf("t=") + 2).trim();
+            return Integer.parseInt(temperature)/1000d;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public String toString() {
         return "DS18B20OneWireUnit{" +
-                "temperatureFromLastMeasurements=" + temperatureFromLastMeasurements +
+                "modulePath='" + modulePath + '\'' +
                 "} " + super.toString();
     }
 }

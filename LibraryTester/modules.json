@@ -23,7 +23,7 @@
     "type" : "OneWire",
     "pin" : {
       "type" : "GPIO",
-      "number" : 3
+      "number" : 6
     },
     "name" : "oneWire0",
     "description" : "Тестовый oneWire",
@@ -33,35 +33,35 @@
       "type" : "DS18B20",
       "pin" : {
         "type" : "GPIO",
-        "number" : 3
+        "number" : 6
       },
       "name" : "temperature0",
       "description" : "Тестовый термометр",
       "userCustomName" : "",
       "userCustomDescription" : "",
-      "rom" : 2954296512824607715
+      "id" : "28-0316a006c5ff"
     }, {
       "type" : "DS18B20",
       "pin" : {
         "type" : "GPIO",
-        "number" : 3
+        "number" : 6
       },
       "name" : "temperature1",
       "description" : "Тестовый термометр",
       "userCustomName" : "",
       "userCustomDescription" : "",
-      "rom" : 2954296512824607714
+      "id" : "28-0316a006c5f0"
     }, {
       "type" : "Unknown",
       "pin" : {
         "type" : "GPIO",
-        "number" : 3
+        "number" : 6
       },
       "name" : "Unknown",
       "description" : "Something",
       "userCustomName" : "",
       "userCustomDescription" : "",
-      "rom" : 2954296512824611811
+      "id" : "28-0316a006c5f9"
     } ]
   } ]
 }

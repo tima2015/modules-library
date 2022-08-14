@@ -23,11 +23,11 @@ public abstract class OneWireUnit extends Module{
     /**
      * Уникальный индетификатор устройства OneWire
      */
-    private final long rom;
+    private final String id;
 
-    public OneWireUnit(Pin pin, String name, String description, long rom) {
+    public OneWireUnit(Pin pin, String name, String description, String id) {
         super(pin, name, description);
-        this.rom = rom;
+        this.id = id;
     }
 
     @JsonCreator
@@ -36,9 +36,9 @@ public abstract class OneWireUnit extends Module{
                        @JsonProperty("description") String description,
                        @JsonProperty("userCustomName") String userCustomName,
                        @JsonProperty("userCustomDescription") String userCustomDescription,
-                       @JsonProperty("rom") long rom) {
+                       @JsonProperty("id") String id) {
         super(pin, name, description, userCustomName, userCustomDescription);
-        this.rom = rom;
+        this.id = id;
     }
 
     public State getState() {
@@ -49,15 +49,15 @@ public abstract class OneWireUnit extends Module{
         this.state = state;
     }
 
-    public long getRom() {
-        return rom;
+    public String getId() {
+        return id;
     }
 
     @Override
     public String toString() {
         return "OneWireUnit{" +
                 "state=" + state +
-                ", rom=" + rom +
+                ", rom=" + id +
                 "} " + super.toString();
     }
 }
