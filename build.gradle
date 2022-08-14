@@ -14,6 +14,13 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:2.13.3"
 }
 
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 machines.customMachines.register("linux-aarch64") {
     it.toolchainFile.set(project.file('JNI-Library/aarch64-linux-gnu-gcc.cmake'))
 }
