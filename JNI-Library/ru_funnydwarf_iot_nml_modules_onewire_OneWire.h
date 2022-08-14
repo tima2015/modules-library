@@ -8,12 +8,22 @@
 extern "C" {
 #endif
 /*
+ * Поиск следующего подключенного устройства
  * Class:     ru_funnydwarf_iot_nml_modules_onewire_OneWire
- * Method:    searchDevices
- * Signature: (I)[J
+ * Method:    searchNextAddress
+ * Signature: (IJI)[J
  */
-JNIEXPORT jlongArray JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_OneWire_searchDevices
-  (JNIEnv *env, jclass jc, jint pornNumber);
+JNIEXPORT jlongArray JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_OneWire_searchNextAddress
+  (JNIEnv *env, jclass jc, jint pin, jlong lastAddress, jlong lastDiscrepancy);
+
+
+/*
+ * Class:     ru_funnydwarf_iot_nml_modules_onewire_OneWire
+ * Method:    readRom
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_ru_funnydwarf_iot_nml_modules_onewire_OneWire_readRom
+  (JNIEnv *env, jclass jc);
 
 #ifdef __cplusplus
 }

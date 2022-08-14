@@ -1,34 +1,45 @@
 package ru.funnydwarf.iot.nml.modules;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.funnydwarf.iot.nml.DigitalValue;
 import ru.funnydwarf.iot.nml.Pin;
-import ru.funnydwarf.iot.nml.PinDigitalWriter;
+import ru.funnydwarf.iot.nml.PinMode;
+import ru.funnydwarf.iot.nml.WrongPinModeException;
 
-public class OutputModule implements Module{
+public class OutputModule extends Module{
 
-    private final PinDigitalWriter writer;
-    private final Pin pin;
-    private final String name;
-
-    OutputModule(Pin pin, String name){
-        this.name = name;
-        this.pin = pin;
-        writer = PinDigitalWriter.getInstance(pin);
+    @JsonIgnore
+    private DigitalValue currentState = DigitalValue.LOW;
+    public OutputModule(Pin pin, String name, String description) {
+        super(pin, name, description);
     }
 
-    OutputModule(Pin pin){
-        this(pin, Module.NO_NAME);
+    @JsonCreator
+    public OutputModule(@JsonProperty("pin") Pin pin,
+                        @JsonProperty("name") String name,
+                        @JsonProperty("description") String description,
+                        @JsonProperty("userCustomName") String userCustomName,
+                        @JsonProperty("userCustomDescription") String userCustomDescription) {
+        super(pin, name, description, userCustomName, userCustomDescription);
     }
 
-    @Override
-    public String getName() {
-        return name;
+    public DigitalValue getCurrentState() {
+        return currentState;
     }
 
-    public PinDigitalWriter getWriter() {
-        return writer;
+    public void setCurrentState(DigitalValue currentState) {
+        this.currentState = currentState;
+        if (getPin().getMode() != PinMode.OUTPUT) {
+            try {
+                getPin().setMode(PinMode.OUTPUT);
+            } catch (WrongPinModeException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        digitalWrite(getPin().getNumber(), currentState.value);
     }
 
-    public Pin getPin() {
-        return pin;
-    }
+    private static native void digitalWrite(int pin, int value);
 }

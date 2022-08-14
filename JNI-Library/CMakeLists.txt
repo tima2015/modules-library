@@ -18,7 +18,7 @@ add_library(JNI_Library SHARED
         ru_funnydwarf_iot_nml_modules_onewire_OneWire.h
         ru_funnydwarf_iot_nml_modules_onewire_OneWire.c
         ru_funnydwarf_iot_nml_Pin.h
-        ru_funnydwarf_iot_nml_Pin.c OneWire.cpp OneWire.h)
+        ru_funnydwarf_iot_nml_Pin.c OneWire.cpp OneWire.h OneWireUtils.h OneWireUtils.c)
 
 #find_library(WIRINGPI_LIBRARY wiringPi)
 
