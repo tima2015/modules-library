@@ -1,40 +1,29 @@
 package ru.funnydwarf.iot.nml.modules;
 
-import com.fasterxml.jackson.annotation.*;
-import ru.funnydwarf.iot.nml.Pin;
-import ru.funnydwarf.iot.nml.modules.onewire.OneWire;
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value=OutputModule.class, name="Output"),
-        @JsonSubTypes.Type(value=OneWire.class, name="OneWire")
-})
 public abstract class Module {
-    private final Pin pin;
+    private final Object address;
     private final String name;
     private final String description;
     private String userCustomName;
     private String userCustomDescription;
 
-    public Module(Pin pin, String name, String description) {
-        this(pin, name, description, "", "");
+    public Module(Object address, String name, String description) {
+        this(address, name, description, "", "");
     }
-
-    @JsonCreator
-    public Module(@JsonProperty("pin") Pin pin,
-                  @JsonProperty("name") String name,
-                  @JsonProperty("description") String description,
-                  @JsonProperty("userCustomName") String userCustomName,
-                  @JsonProperty("userCustomDescription") String userCustomDescription) {
-        this.pin = pin;
+    public Module(Object address,
+                  String name,
+                  String description,
+                  String userCustomName,
+                  String userCustomDescription) {
+        this.address = address;
         this.name = name;
         this.description = description;
         this.userCustomName = userCustomName;
         this.userCustomDescription = userCustomDescription;
     }
 
-    public Pin getPin() {
-        return pin;
+    public Object getAddress() {
+        return address;
     }
 
     public String getName() {
@@ -64,7 +53,7 @@ public abstract class Module {
     @Override
     public String toString() {
         return "Module{" +
-                "pin=" + pin +
+                "address=" + address +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", userCustomName='" + userCustomName + '\'' +

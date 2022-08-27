@@ -10,13 +10,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 include_directories("${JAVA_HOME}/include" "${JAVA_HOME}/include/linux" "/usr/local/include" "/usr/local/lib")
 
 add_library(JNI_Library SHARED
-        test.c
-        ru_funnydwarf_iot_nml_Pin.h
-        ru_funnydwarf_iot_nml_Pin.c
-        ru_funnydwarf_iot_nml_modules_OutputModule.h
-        ru_funnydwarf_iot_nml_modules_OutputModule.c
         ru_funnydwarf_iot_nml_JNILibrary.h
-        ru_funnydwarf_iot_nml_JNILibrary.c)
+        ru_funnydwarf_iot_nml_JNILibrary.c
+        ru_funnydwarf_iot_nml_modules_receiver_writer_NativeWriter.h
+        ru_funnydwarf_iot_nml_modules_receiver_writer_NativeWriter.c
+        ru_funnydwarf_iot_nml_modules_sensor_reader_NativeReader.h
+        ru_funnydwarf_iot_nml_modules_sensor_reader_NativeReader.c)
 
 #find_library(WIRINGPI_LIBRARY wiringPi)
 
