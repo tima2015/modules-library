@@ -1,7 +1,8 @@
 package ru.funnydwarf.iot.nml.modules.sensor.reader;
 
-public interface Reader {
+import ru.funnydwarf.iot.nml.modules.sensor.MeasurementData;
 
-    double read(Object address);
+public interface Reader {
+    MeasurementData[] read(Object address);
 
 }

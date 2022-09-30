@@ -1,10 +1,14 @@
 package ru.funnydwarf.iot.nml.modules.receiver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.nml.DigitalValue;
 import ru.funnydwarf.iot.nml.modules.Module;
 import ru.funnydwarf.iot.nml.modules.receiver.writer.Writer;
 
 public class Receiver extends Module {
+
+    public static final Logger log = LoggerFactory.getLogger(Receiver.class);
 
     private DigitalValue current = null;
     private Writer writer;
@@ -24,11 +28,12 @@ public class Receiver extends Module {
     }
 
     public void write(DigitalValue value) {
+        log.debug("write() called with: value = [{}]", value);
         current = value;
         try {
             writer.write(getAddress(), value);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             current = null;
         }
     }
