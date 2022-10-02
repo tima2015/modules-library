@@ -47,14 +47,12 @@ public class FileDataIO implements DataIO {
     }
 
     @Override
-    public MeasurementData[] read(String name, String unitName, int offset, int length) throws IOException {
-        MeasurementData[] measurementData = new MeasurementData[length];
-
+    public MeasurementData[][] read(String name, String[] units, int offset, int length) throws IOException {
         File directory = new File(destination + name);
         File[] files = directory.listFiles();
         if (files == null){
             log.warn("Measurement history files not found!");
-            return new MeasurementData[0];
+            return new MeasurementData[0][0];
         }
 
         Arrays.sort(files, (o1, o2) -> {
@@ -70,8 +68,10 @@ public class FileDataIO implements DataIO {
             return Long.compare(o1Calendar.getTimeInMillis(), o2Calendar.getTimeInMillis());
         });
 
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+        MeasurementData[][] measurementData = new MeasurementData[units.length][Math.min(files.length, length)];
 
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+        // TODO: 02.10.2022 rewrite
         for (int i = 0, of = 0, j = 0; i < files.length; i++) {
             List<String> list = Files.readAllLines(files[i].toPath());
             for (int k = list.size() - 1; k >= 0; k--) {

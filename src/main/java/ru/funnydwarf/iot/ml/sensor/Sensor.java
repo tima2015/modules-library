@@ -1,12 +1,12 @@
-package ru.funnydwarf.iot.nml.modules.sensor;
+package ru.funnydwarf.iot.ml.sensor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import ru.funnydwarf.iot.nml.modules.Module;
-import ru.funnydwarf.iot.nml.modules.sensor.datawriter.DataIO;
-import ru.funnydwarf.iot.nml.modules.sensor.reader.Reader;
+import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.sensor.reader.Reader;
+import ru.funnydwarf.iot.ml.sensor.datawriter.DataIO;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -45,7 +45,11 @@ public class Sensor extends Module implements SchedulingConfigurer {
     public MeasurementData[][] getHistoryMeasurementValue(int offset, int length){
         log.debug("getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", offset, length);
         try {
-            return dataIO.read(getName(), offset, length);
+            String[] units = new String[measurementData.length];
+            for (int i = 0; i < units.length; i++) {
+                units[i] = measurementData[i].unitName();
+            }
+            return dataIO.read(getName(),units, offset, length);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

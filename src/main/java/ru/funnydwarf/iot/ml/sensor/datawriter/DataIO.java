@@ -7,5 +7,5 @@ import java.io.IOException;
 public interface DataIO {
     void write(MeasurementData[] data, String name) throws IOException;
 
-    MeasurementData[] read(String name,String unitName, int offset, int length) throws IOException;
+    MeasurementData[][] read(String name,String[] units, int offset, int length) throws IOException;
 }
