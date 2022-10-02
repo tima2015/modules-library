@@ -1,6 +1,6 @@
-package ru.funnydwarf.iot.nml.modules.sensor.datawriter;
+package ru.funnydwarf.iot.ml.sensor.datawriter;
 
-import ru.funnydwarf.iot.nml.modules.sensor.MeasurementData;
+import ru.funnydwarf.iot.ml.sensor.MeasurementData;
 
 import java.io.IOException;
 

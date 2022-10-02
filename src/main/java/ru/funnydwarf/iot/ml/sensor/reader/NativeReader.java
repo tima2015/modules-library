@@ -1,9 +1,9 @@
-package ru.funnydwarf.iot.nml.modules.sensor.reader;
+package ru.funnydwarf.iot.ml.sensor.reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.funnydwarf.iot.nml.modules.sensor.MeasurementData;
+import ru.funnydwarf.iot.ml.sensor.MeasurementData;
 
 @Component
 public class NativeReader implements Reader{

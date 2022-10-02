@@ -1,9 +1,8 @@
 plugins {
     id 'java'
-    id "io.github.tomtzook.gradle-cmake" version "1.0.0"
 }
 
-group 'ru.funnydwarf.iot.nml'
+group 'ru.funnydwarf.iot.ml'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -13,29 +12,3 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter:2.7.3'
 }
-
-jar {
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-machines.customMachines.register("linux-aarch64") {
-    it.toolchainFile.set(project.file('JNI-Library/aarch64-linux-gnu-gcc.cmake'))
-}
-
-def compileMachineTargets = []
-compileMachineTargets.addAll(machines.customMachines)
-
-cmake {
-    targets {
-        jni_library {
-            cmakeLists.set(file('JNI-Library/CMakeLists.txt'))
-            targetMachines.set(compileMachineTargets)
-        }
-    }
-}
-
-tasks.clean.dependsOn tasks.cmakeClean
-tasks.build.dependsOn tasks.cmakeBuild

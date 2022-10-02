@@ -1,10 +1,10 @@
-package ru.funnydwarf.iot.nml.modules.sensor.datawriter;
+package ru.funnydwarf.iot.ml.sensor.datawriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.funnydwarf.iot.nml.modules.sensor.MeasurementData;
+import ru.funnydwarf.iot.ml.sensor.MeasurementData;
 
 import java.io.File;
 import java.io.IOException;

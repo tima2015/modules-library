@@ -1,10 +1,10 @@
-package ru.funnydwarf.iot.nml.modules.receiver;
+package ru.funnydwarf.iot.ml.receiver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.nml.DigitalValue;
-import ru.funnydwarf.iot.nml.modules.Module;
-import ru.funnydwarf.iot.nml.modules.receiver.writer.Writer;
+import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.receiver.writer.Writer;
 
 public class Receiver extends Module {
 

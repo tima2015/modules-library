@@ -1,4 +1,4 @@
-package ru.funnydwarf.iot.nml.modules.receiver.writer;
+package ru.funnydwarf.iot.ml.receiver.writer;
 
 import ru.funnydwarf.iot.nml.DigitalValue;
 

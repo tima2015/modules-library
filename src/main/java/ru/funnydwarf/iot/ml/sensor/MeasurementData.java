@@ -1,4 +1,4 @@
-package ru.funnydwarf.iot.nml.modules.sensor;
+package ru.funnydwarf.iot.ml.sensor;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package ru.funnydwarf.iot.nml.modules;
+package ru.funnydwarf.iot.ml;
 
 public abstract class Module {
     private final Object address;
