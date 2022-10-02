@@ -47,14 +47,14 @@ public class FileDataIO implements DataIO {
     }
 
     @Override
-    public MeasurementData[][] read(String name, int offset, int length) throws IOException {
+    public MeasurementData[] read(String name, String unitName, int offset, int length) throws IOException {
         MeasurementData[] measurementData = new MeasurementData[length];
 
         File directory = new File(destination + name);
         File[] files = directory.listFiles();
         if (files == null){
             log.warn("Measurement history files not found!");
-            return new MeasurementData[0][0];
+            return new MeasurementData[0];
         }
 
         Arrays.sort(files, (o1, o2) -> {
@@ -85,7 +85,7 @@ public class FileDataIO implements DataIO {
                 String[] split = list.get(k).split("\t");
                 try {
                     Date dateValue = formatter.parse(files[i].getName().split("\\.")[0] + ' ' + split[0]);
-                    records.add(new SensorMeasurementRecord(formatter.format(dateValue), Double.parseDouble(split[1])));
+                    measurementData[i] = new MeasurementData(Double.parseDouble(split[1]), unitName, name, dateValue);
                     j++;
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
