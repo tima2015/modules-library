@@ -11,7 +11,7 @@ public abstract class ModuleGroup {
     private State state = State.NOT_INITIALIZED;
     private String stateMessage = "";
   
-    public void initialize();
+    public abstract void initialize();
     
     public State getState() {
         return state;
