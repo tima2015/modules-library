@@ -10,5 +10,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.4'
 }
+
+//#############ENCODING##############
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+javadoc {
+    options.encoding = 'UTF-8'
+}
+//###################################
