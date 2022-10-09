@@ -9,15 +9,11 @@ public abstract class ModuleGroup {
     }
   
     private State state = State.NOT_INITIALIZED;
-    private String stateMessage = "";
-  
-    public abstract void initialize();
+
+    public abstract void initialize() throws Exception;
     
     public State getState() {
         return state;
     }
-  
-    public String getStateMessage() {
-        return stateMessage;
-    }
+
 }
