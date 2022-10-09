@@ -1,5 +1,10 @@
 package ru.funnydwarf.iot.ml.sensor.dataio;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.funnydwarf.iot.ml.sensor.MeasurementData;
 
 import java.io.File;
@@ -12,6 +17,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Получение данных замеров из хранилища в виде файла
+ */
 @Component
 public class FileDataInput implements DataInput{
 
@@ -21,7 +29,7 @@ public class FileDataInput implements DataInput{
     private final DateFormat dateTimeFormat;
 
     public FileDataInput(@Value("${Sensor.dataFoleder:collectedData}") String destination,
-                         @Qualifer("dateTimeFormat") DateFormat dateTimeFormat) {
+                         @Qualifier("dateTimeFormat") DateFormat dateTimeFormat) {
         this.destination = destination;
         this.dateTimeFormat = dateTimeFormat;
     }
