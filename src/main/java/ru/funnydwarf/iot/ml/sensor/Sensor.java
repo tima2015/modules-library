@@ -2,20 +2,15 @@ package ru.funnydwarf.iot.ml.sensor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.sensor.dataio.DataInput;
 import ru.funnydwarf.iot.ml.sensor.dataio.DataOutput;
 import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
-import java.util.Optional;
-import java.util.concurrent.Executors;
 
-public class Sensor extends Module implements SchedulingConfigurer {
+public class Sensor extends Module {
 
     private final static Logger log = LoggerFactory.getLogger(Sensor.class);
 
@@ -27,12 +22,12 @@ public class Sensor extends Module implements SchedulingConfigurer {
     private final DataOutput dataOutput;
     private final long timeToRepeatMeasurement;
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, Object address, String name, String description) {
-        this(reader, dataInput, dataOutput, timeToRepeatMeasurement, address, name, description, "", "");
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement,ModuleGroup group, Object address, String name, String description) {
+        this(reader, dataInput, dataOutput, timeToRepeatMeasurement, group, address, name, description, "", "");
     }
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, Object address, String name, String description, String userCustomName, String userCustomDescription) {
-        super(address, name, description, userCustomName, userCustomDescription);
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, ModuleGroup group, Object address, String name, String description, String userCustomName, String userCustomDescription) {
+        super(group, address, name, description, userCustomName, userCustomDescription);
         this.reader = reader;
         this.dataInput = dataInput;
         this.dataOutput = dataOutput;
@@ -63,7 +58,7 @@ public class Sensor extends Module implements SchedulingConfigurer {
         return new MeasurementData[0][0];
     }
 
-    private void updateMeasurement() {
+    public void updateMeasurement() {
         log.debug("updateMeasurement() called");
         try {
             measurementData = reader.read(getAddress());
@@ -77,18 +72,5 @@ public class Sensor extends Module implements SchedulingConfigurer {
             log.error(e.getMessage(), e);
             measurementData = new MeasurementData[0];
         }
-    }
-
-    @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(Executors.newSingleThreadScheduledExecutor());
-        taskRegistrar.addTriggerTask(this::updateMeasurement, triggerContext -> {
-            Optional<Date> lastCompletionTime =
-                    Optional.ofNullable(triggerContext.lastCompletionTime());
-            Instant nextExecutionTime =
-                    lastCompletionTime.orElseGet(Date::new).toInstant()
-                            .plusMillis(timeToRepeatMeasurement);
-            return Date.from(nextExecutionTime);
-        });
     }
 }
