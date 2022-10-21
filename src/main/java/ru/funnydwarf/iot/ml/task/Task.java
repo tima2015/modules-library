@@ -1,43 +1,81 @@
 package ru.funnydwarf.iot.ml.task;
 
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.task.command.TaskCommand;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.Executors;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Класс для реализации выполнения действий модулей при определённых событиях
+ *
  * @param <T> класс модулей
  */
 public class Task<T extends Module> {
 
+    private final Logger log;
     private final String name;
     private final String description;
+    private final boolean repeat;
+    private boolean disable;
+    private Date lastDone = null;
     /**
      * Действие с модулями, которое должно произойти при событии активировавшем тригер
      */
-    private final TaskCommand listener;
-
-    private final TaskTriggerType type;
+    private final TaskCommand<T> listener;
     private final List<T> modules;
-    private final TaskTimer taskTimer;
 
-    public Task(String name, String description, TaskCommand listener, TaskTriggerType triggerType, List<T> modules, TaskTimer taskTimer) {
+    public Task(String name, String description, boolean repeat, boolean disable, TaskCommand<T> listener, List<T> modules) {
+        log = LoggerFactory.getLogger(name);
         this.name = name;
         this.description = description;
+        this.repeat = repeat;
+        this.disable = disable;
         this.listener = listener;
         this.modules = modules;
-        this.type = triggerType;
-        this.taskTimer = taskTimer;
     }
 
-    private void onTrigger(){
-        for (T module : modules) {
-            listener.<T>onTaskTrigger(module);
+    public void doTask() {
+        log.debug("doTask() called");
+        if (disable) {
+            log.debug("doTask: task disable! Pass...");
+            return;
         }
+        for (T module : modules) {
+            listener.onDoTask(module);
+        }
+        lastDone = new Date();
+        log.debug("doTask: task complete! New lastDone = [{}]", lastDone);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public boolean isDisable() {
+        return disable;
+    }
+
+    public void setDisable(boolean disable) {
+        this.disable = disable;
+    }
+
+    /**
+     * @return Время последнего выполнения задания или null если задание ещё не выполнялось. После инициализации считается что задание не выполнялось!
+     */
+    public Date getLastDone() {
+        return lastDone;
     }
 
     /**
@@ -45,31 +83,5 @@ public class Task<T extends Module> {
      */
     public List<T> getModules() {
         return Collections.unmodifiableList(modules);
-    }
-
-    public TaskTriggerType getType() {
-        return type;
-    }
-
-    private class TaskTimer implements SchedulingConfigurer {
-
-        private final long timeToRepeat;
-
-        private TaskTimer(long timeToRepeat) {
-            this.timeToRepeat = timeToRepeat;
-        }
-
-        @Override
-        public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-            taskRegistrar.setScheduler(Executors.newSingleThreadScheduledExecutor());
-            taskRegistrar.addTriggerTask(Task.this::onTrigger, triggerContext -> {
-                Optional<Date> lastCompletionTime =
-                        Optional.ofNullable(triggerContext.lastCompletionTime());
-                Instant nextExecutionTime =
-                        lastCompletionTime.orElseGet(Date::new).toInstant()
-                                .plusMillis(timeToRepeat);
-                return Date.from(nextExecutionTime);
-            });
-        }
     }
 }
