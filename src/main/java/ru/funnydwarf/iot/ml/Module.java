@@ -1,25 +1,34 @@
 package ru.funnydwarf.iot.ml;
 
 public abstract class Module {
+
+    private final ModuleGroup group;
     private final Object address;
     private final String name;
     private final String description;
     private String userCustomName;
     private String userCustomDescription;
 
-    public Module(Object address, String name, String description) {
-        this(address, name, description, "", "");
+    public Module(ModuleGroup group, Object address, String name, String description) {
+        this(group, address, name, description, "", "");
     }
-    public Module(Object address,
+
+    public Module(ModuleGroup group,
+                  Object address,
                   String name,
                   String description,
                   String userCustomName,
                   String userCustomDescription) {
+        this.group = group;
         this.address = address;
         this.name = name;
         this.description = description;
         this.userCustomName = userCustomName;
         this.userCustomDescription = userCustomDescription;
+    }
+
+    public ModuleGroup getGroup() {
+        return group;
     }
 
     public Object getAddress() {
