@@ -1,10 +1,28 @@
 package ru.funnydwarf.iot.ml;
 
+/**
+ * Класс модуля
+ */
 public abstract class Module {
 
+    /**
+     * Группа к которой относится данный модуль
+     */
     private final ModuleGroup group;
+
+    /**
+     * Каждый модуль в каком либо представлении имеет свой адрес
+     */
     private final Object address;
+
+    /**
+     * Имя модуля
+     */
     private final String name;
+
+    /**
+     * Описание модуля
+     */
     private final String description;
 
     public Module(ModuleGroup group,

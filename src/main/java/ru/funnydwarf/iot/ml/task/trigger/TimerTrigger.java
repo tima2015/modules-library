@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 
+/**
+ * Циклический триггер по таймеру
+ */
 public class TimerTrigger extends Trigger implements SchedulingConfigurer {
 
     private final long timeToRepeat;

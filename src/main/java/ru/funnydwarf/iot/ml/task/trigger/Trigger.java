@@ -6,6 +6,9 @@ import ru.funnydwarf.iot.ml.task.Task;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Класс объекты которого активирую выполнение заданий (Task) при определённых событиях
+ */
 public abstract class Trigger {
 
     private final List<Task<? extends Module>> tasks;

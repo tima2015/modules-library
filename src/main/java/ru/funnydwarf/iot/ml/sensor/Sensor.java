@@ -10,24 +10,39 @@ import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
 import java.io.IOException;
 
+/**
+ * Сенсор/Датчик
+ */
 public class Sensor extends Module {
-
-    private final static Logger log = LoggerFactory.getLogger(Sensor.class);
-
+    private final Logger log;
+    /**
+     * Данные последних замеров
+     */
     private MeasurementData[] measurementData;
+    /**
+     * Идентификаторы замеров
+     */
     private final String[] measurementIDs;
 
+    /**
+     * Читающий показания датчика
+     */
     private final Reader reader;
+    /**
+     * Ввод данных для просмотра информации о замерах
+     */
     private final DataInput dataInput;
+    /**
+     * Вывод данных для сохранения замеров
+     */
     private final DataOutput dataOutput;
-    private final long timeToRepeatMeasurement;
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, ModuleGroup group, Object address, String name, String description) {
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description) {
         super(group, address, name, description);
+        log = LoggerFactory.getLogger(name);
         this.reader = reader;
         this.dataInput = dataInput;
         this.dataOutput = dataOutput;
-        this.timeToRepeatMeasurement = timeToRepeatMeasurement;
         measurementData = reader.getTemplateRead();
         measurementIDs = new String[measurementData.length];
         for (int i = 0; i < measurementData.length; i++) {
@@ -39,6 +54,12 @@ public class Sensor extends Module {
         return measurementData;
     }
 
+    /**
+     * Просмотреть историю замеров
+     * @param offset отступ в количестве замеров от последнего замера
+     * @param length количество возвращаемых замеров
+     * @return массив замеров начинающихся с offset-того замера (от последнего замера) и размера length
+     */
     public MeasurementData[][] getHistoryMeasurementValue(int offset, int length){
         log.debug("getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", offset, length);
         MeasurementData[][] history = new MeasurementData[measurementData.length][];
@@ -54,6 +75,9 @@ public class Sensor extends Module {
         return new MeasurementData[0][0];
     }
 
+    /**
+     * Выполнить получение новых замеров и записать полученные данные в хранилище
+     */
     public void updateMeasurement() {
         log.debug("updateMeasurement() called");
         try {
