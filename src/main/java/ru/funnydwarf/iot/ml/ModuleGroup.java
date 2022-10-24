@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Группа модулей
  */
-public abstract class ModuleGroup {
+public class ModuleGroup {
 
     private final Logger log;
 
@@ -28,6 +28,14 @@ public abstract class ModuleGroup {
         OK
     }
 
+    public interface Initializer {
+        /**
+         * Выполнение необходимых для инициализации действий
+         * @throws Exception исключение возникшее при инициализации
+         */
+        void initialize(ModuleGroup group) throws Exception;
+    }
+
     /**
      * Состояние инициализации группы
      */
@@ -42,10 +50,16 @@ public abstract class ModuleGroup {
      */
     private final String description;
 
-    public ModuleGroup(String name, String description) {
+    /**
+     * Инициализатор группы модулей
+     */
+    private final Initializer initializer;
+
+    public ModuleGroup(String name, String description, Initializer initializer) {
         log = LoggerFactory.getLogger(name);
         this.name = name;
         this.description = description;
+        this.initializer = initializer;
     }
 
     /**
@@ -53,7 +67,7 @@ public abstract class ModuleGroup {
      */
     public final void initialize() {
         try {
-            doInit();
+            initializer.initialize(this);
             state = State.OK;
         } catch (Exception e) {
             state = State.INITIALIZATION_ERROR;
@@ -61,12 +75,6 @@ public abstract class ModuleGroup {
             throw  new RuntimeException(e);
         }
     }
-
-    /**
-     * Выполнение необходимых для инициализации действий
-     * @throws Exception исключение возникшее при инициализации
-     */
-    protected abstract void doInit() throws Exception;
     
     public State getState() {
         return state;
