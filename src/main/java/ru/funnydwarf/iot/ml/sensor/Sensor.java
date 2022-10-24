@@ -22,12 +22,8 @@ public class Sensor extends Module {
     private final DataOutput dataOutput;
     private final long timeToRepeatMeasurement;
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement,ModuleGroup group, Object address, String name, String description) {
-        this(reader, dataInput, dataOutput, timeToRepeatMeasurement, group, address, name, description, "", "");
-    }
-
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, ModuleGroup group, Object address, String name, String description, String userCustomName, String userCustomDescription) {
-        super(group, address, name, description, userCustomName, userCustomDescription);
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, ModuleGroup group, Object address, String name, String description) {
+        super(group, address, name, description);
         this.reader = reader;
         this.dataInput = dataInput;
         this.dataOutput = dataOutput;

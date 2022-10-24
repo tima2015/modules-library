@@ -13,12 +13,8 @@ public class Receiver extends Module {
     private Object lastValue = null;
     private final Writer writer;
 
-    public Receiver(Writer writer,ModuleGroup group, Object address, String name, String description) {
-        this(writer, group, address, name,description, "", "");
-    }
-
-    public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description, String userCustomName, String userCustomDescription) {
-        super(group, address, name, description, userCustomName, userCustomDescription);
+    public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description) {
+        super(group, address, name, description);
         this.writer = writer;
     }
 
