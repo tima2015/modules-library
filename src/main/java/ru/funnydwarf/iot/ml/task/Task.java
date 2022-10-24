@@ -48,9 +48,7 @@ public class Task<T extends Module> {
             log.debug("doTask: task to be completed once and has already been completed! Pass...");
             return;
         }
-        for (T module : modules) {
-            listener.onDoTask(module);
-        }
+        modules.forEach(listener::onDoTask);
         lastDone = new Date();
         log.debug("doTask: task complete! New lastDone = [{}]", lastDone);
     }
