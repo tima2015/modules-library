@@ -73,6 +73,8 @@ public class ModuleGroup {
             state = State.INITIALIZATION_ERROR;
             log.error(e.getMessage(), e);
             throw  new RuntimeException(e);
+        } finally {
+            log.info("initialize: {}", state.name());
         }
     }
     
