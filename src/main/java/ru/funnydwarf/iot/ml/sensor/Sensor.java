@@ -2,41 +2,47 @@ package ru.funnydwarf.iot.ml.sensor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.sensor.dataio.DataInput;
 import ru.funnydwarf.iot.ml.sensor.dataio.DataOutput;
 import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
-import java.util.Optional;
-import java.util.concurrent.Executors;
 
-public class Sensor extends Module implements SchedulingConfigurer {
-
-    private final static Logger log = LoggerFactory.getLogger(Sensor.class);
-
+/**
+ * Сенсор/Датчик
+ */
+public class Sensor extends Module {
+    private final Logger log;
+    /**
+     * Данные последних замеров
+     */
     private MeasurementData[] measurementData;
+    /**
+     * Идентификаторы замеров
+     */
     private final String[] measurementIDs;
 
+    /**
+     * Читающий показания датчика
+     */
     private final Reader reader;
+    /**
+     * Ввод данных для просмотра информации о замерах
+     */
     private final DataInput dataInput;
+    /**
+     * Вывод данных для сохранения замеров
+     */
     private final DataOutput dataOutput;
-    private final long timeToRepeatMeasurement;
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, Object address, String name, String description) {
-        this(reader, dataInput, dataOutput, timeToRepeatMeasurement, address, name, description, "", "");
-    }
-
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, long timeToRepeatMeasurement, Object address, String name, String description, String userCustomName, String userCustomDescription) {
-        super(address, name, description, userCustomName, userCustomDescription);
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description) {
+        super(group, address, name, description);
+        log = LoggerFactory.getLogger(name);
         this.reader = reader;
         this.dataInput = dataInput;
         this.dataOutput = dataOutput;
-        this.timeToRepeatMeasurement = timeToRepeatMeasurement;
         measurementData = reader.getTemplateRead();
         measurementIDs = new String[measurementData.length];
         for (int i = 0; i < measurementData.length; i++) {
@@ -48,6 +54,12 @@ public class Sensor extends Module implements SchedulingConfigurer {
         return measurementData;
     }
 
+    /**
+     * Просмотреть историю замеров
+     * @param offset отступ в количестве замеров от последнего замера
+     * @param length количество возвращаемых замеров
+     * @return массив замеров начинающихся с offset-того замера (от последнего замера) и размера length
+     */
     public MeasurementData[][] getHistoryMeasurementValue(int offset, int length){
         log.debug("getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", offset, length);
         MeasurementData[][] history = new MeasurementData[measurementData.length][];
@@ -63,7 +75,10 @@ public class Sensor extends Module implements SchedulingConfigurer {
         return new MeasurementData[0][0];
     }
 
-    private void updateMeasurement() {
+    /**
+     * Выполнить получение новых замеров и записать полученные данные в хранилище
+     */
+    public void updateMeasurement() {
         log.debug("updateMeasurement() called");
         try {
             measurementData = reader.read(getAddress());
@@ -77,18 +92,5 @@ public class Sensor extends Module implements SchedulingConfigurer {
             log.error(e.getMessage(), e);
             measurementData = new MeasurementData[0];
         }
-    }
-
-    @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(Executors.newSingleThreadScheduledExecutor());
-        taskRegistrar.addTriggerTask(this::updateMeasurement, triggerContext -> {
-            Optional<Date> lastCompletionTime =
-                    Optional.ofNullable(triggerContext.lastCompletionTime());
-            Instant nextExecutionTime =
-                    lastCompletionTime.orElseGet(Date::new).toInstant()
-                            .plusMillis(timeToRepeatMeasurement);
-            return Date.from(nextExecutionTime);
-        });
     }
 }
