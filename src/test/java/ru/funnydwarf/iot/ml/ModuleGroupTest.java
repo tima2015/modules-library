@@ -19,8 +19,6 @@ class ModuleGroupTest {
         ModuleGroup group = new ModuleGroup("niceTestGroupName",
                 "niceTestGroupDescription",
                 g -> log.debug("initialize() called with: group1 = [{}]", g));
-        assertEquals(group.getState(), ModuleGroup.State.NOT_INITIALIZED);
-        group.initialize();
         assertEquals(group.getState(), ModuleGroup.State.OK);
     }
 
@@ -30,12 +28,6 @@ class ModuleGroupTest {
             log.debug("initialize() called with: group1 = [{}]", g);
             throw new RuntimeException("this is a bad test");
         });
-        assertEquals(group.getState(), ModuleGroup.State.NOT_INITIALIZED);
-        try {
-            group.initialize();
-        } catch (Exception e) {
-            log.debug("exception? in this case is ok :)", e);
-        }
         assertEquals(group.getState(), ModuleGroup.State.INITIALIZATION_ERROR);
     }
 }

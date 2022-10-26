@@ -52,19 +52,20 @@ public class ModuleGroup {
         this.name = name;
         this.description = description;
         this.initializer = initializer;
+        initialize();
     }
 
     /**
      * Выполнить инициализацию
      */
-    public final void initialize() {
+    private void initialize() {
+        log.debug("initialize() called");
         try {
             initializer.initialize(this);
             state = State.OK;
         } catch (Exception e) {
             state = State.INITIALIZATION_ERROR;
             log.error(e.getMessage(), e);
-            throw  new RuntimeException(e);
         } finally {
             log.info("initialize: {}", state.name());
         }
