@@ -28,14 +28,6 @@ public class ModuleGroup {
         OK
     }
 
-    public interface Initializer {
-        /**
-         * Выполнение необходимых для инициализации действий
-         * @throws Exception исключение возникшее при инициализации
-         */
-        void initialize(ModuleGroup group) throws Exception;
-    }
-
     /**
      * Состояние инициализации группы
      */
