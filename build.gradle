@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'ru.funnydwarf.iot.ml'
-version '1.0-SNAPSHOT'
+version '0.2'
 
 repositories {
     mavenCentral()
