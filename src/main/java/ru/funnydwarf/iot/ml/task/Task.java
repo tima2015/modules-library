@@ -3,6 +3,7 @@ package ru.funnydwarf.iot.ml.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.task.command.TaskCommand;
 
 import java.util.Collections;
@@ -44,11 +45,17 @@ public class Task<T extends Module> {
             log.debug("doTask: task disable! Pass...");
             return;
         }
-        if (!repeat && lastDone != null){
+        if (!repeat && lastDone != null) {
             log.debug("doTask: task to be completed once and has already been completed! Pass...");
             return;
         }
-        modules.forEach(listener::onDoTask);
+        for (T module : modules) {
+            if (module.getGroup().getState() == ModuleGroup.State.OK) {
+                listener.onDoTask(module);
+            }
+            log.debug("doTask: ModuleGroup = [{}] have initialization error! Module = [{}] passed...",
+                    module.getGroup().getName(), module.getName());
+        }
         lastDone = new Date();
         log.debug("doTask: task complete! New lastDone = [{}]", lastDone);
     }
