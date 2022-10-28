@@ -20,7 +20,12 @@ class TaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskTest.class);
 
-    private ModuleGroup group = new ModuleGroup("testGroupname", "testGroupDescription", g->{});
+    private ModuleGroup group = new ModuleGroup("testGroupname", "testGroupDescription") {
+        @Override
+        protected ModuleGroup.State initialize() throws Exception {
+            return State.OK;
+        }
+    };
 
     private TaskCommand<Module> plugCommand = module -> log.debug("onDoTask() called with: module = [{}]", module);
 

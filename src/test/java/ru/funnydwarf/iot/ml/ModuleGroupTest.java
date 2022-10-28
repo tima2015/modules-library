@@ -17,17 +17,26 @@ class ModuleGroupTest {
     @Test
     void initialize() {
         ModuleGroup group = new ModuleGroup("niceTestGroupName",
-                "niceTestGroupDescription",
-                g -> log.debug("initialize() called with: group1 = [{}]", g));
+                "niceTestGroupDescription") {
+            @Override
+            protected State initialize() throws Exception {
+                log.debug("initialize() called with: group1 = [{}]", this);
+                return State.OK;
+            }
+        };
         assertEquals(group.getState(), ModuleGroup.State.OK);
     }
 
     @Test
     void initialize_bad() {
-        ModuleGroup group = new ModuleGroup("badTestGroupName", "badTestGroupDescription", g -> {
-            log.debug("initialize() called with: group1 = [{}]", g);
-            throw new RuntimeException("this is a bad test");
-        });
+        ModuleGroup group = new ModuleGroup("badTestGroupName", "badTestGroupDescription") {
+
+            @Override
+            protected State initialize() throws Exception {
+                log.debug("initialize() called with: group1 = [{}]", this);
+                throw new RuntimeException("this is a bad test");
+            }
+        };
         assertEquals(group.getState(), ModuleGroup.State.INITIALIZATION_ERROR);
     }
 }

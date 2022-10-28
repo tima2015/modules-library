@@ -6,14 +6,14 @@ import org.slf4j.LoggerFactory;
 /**
  * Группа модулей
  */
-public class ModuleGroup {
+public abstract class ModuleGroup {
 
     private final Logger log;
 
     /**
      * Состояние инициализации групп модулей
      */
-    enum State {
+    public enum State {
         /**
          * Начальное состояние
          */
@@ -42,27 +42,21 @@ public class ModuleGroup {
      */
     private final String description;
 
-    /**
-     * Инициализатор группы модулей
-     */
-    private final Initializer initializer;
 
-    public ModuleGroup(String name, String description, Initializer initializer) {
+    public ModuleGroup(String name, String description) {
         log = LoggerFactory.getLogger(name);
         this.name = name;
         this.description = description;
-        this.initializer = initializer;
-        initialize();
+        doInitialize();
     }
 
     /**
      * Выполнить инициализацию
      */
-    private void initialize() {
+    private void doInitialize() {
         log.debug("initialize() called");
         try {
-            initializer.initialize(this);
-            state = State.OK;
+            state = initialize();
         } catch (Exception e) {
             state = State.INITIALIZATION_ERROR;
             log.error(e.getMessage(), e);
@@ -70,7 +64,12 @@ public class ModuleGroup {
             log.info("initialize: {}", state.name());
         }
     }
-    
+
+    /**
+     * Инициализация группы модулей
+     */
+    protected abstract State initialize() throws Exception;
+
     public State getState() {
         return state;
     }
