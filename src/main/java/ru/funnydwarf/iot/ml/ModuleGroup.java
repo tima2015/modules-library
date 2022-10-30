@@ -2,11 +2,12 @@ package ru.funnydwarf.iot.ml;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Группа модулей
  */
-public abstract class ModuleGroup {
+public abstract class ModuleGroup implements InitializingBean {
 
     private final Logger log;
 
@@ -47,21 +48,22 @@ public abstract class ModuleGroup {
         log = LoggerFactory.getLogger(name);
         this.name = name;
         this.description = description;
-        doInitialize();
     }
 
-    /**
-     * Выполнить инициализацию
-     */
-    private void doInitialize() {
-        log.debug("initialize() called");
+    @Override
+    public void afterPropertiesSet() {
+        log.debug("afterPropertiesSet() called");
+        if (state != State.NOT_INITIALIZED) {
+            log.warn("afterPropertiesSet: ModuleGroup = [{}] already init! Pass...", this.name);
+            return;
+        }
         try {
             state = initialize();
         } catch (Exception e) {
             state = State.INITIALIZATION_ERROR;
             log.error(e.getMessage(), e);
         } finally {
-            log.info("initialize: {}", state.name());
+            log.info("afterPropertiesSet: {}", state.name());
         }
     }
 
