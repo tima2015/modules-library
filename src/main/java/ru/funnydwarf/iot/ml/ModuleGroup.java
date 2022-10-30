@@ -12,27 +12,9 @@ public abstract class ModuleGroup implements InitializingBean {
     private final Logger log;
 
     /**
-     * Состояние инициализации групп модулей
-     */
-    public enum State {
-        /**
-         * Начальное состояние
-         */
-        NOT_INITIALIZED,
-        /**
-         * Ошибка инициализации
-         */
-        INITIALIZATION_ERROR,
-        /**
-         * Инициализация успешна
-         */
-        OK
-    }
-
-    /**
      * Состояние инициализации группы
      */
-    private State state = State.NOT_INITIALIZED;
+    private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
 
     /**
      * Имя группы
@@ -53,27 +35,27 @@ public abstract class ModuleGroup implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         log.debug("afterPropertiesSet() called");
-        if (state != State.NOT_INITIALIZED) {
+        if (initializationState != InitializationState.NOT_INITIALIZED) {
             log.warn("afterPropertiesSet: ModuleGroup = [{}] already init! Pass...", this.name);
             return;
         }
         try {
-            state = initialize();
+            initializationState = initialize();
         } catch (Exception e) {
-            state = State.INITIALIZATION_ERROR;
+            initializationState = InitializationState.INITIALIZATION_ERROR;
             log.error(e.getMessage(), e);
         } finally {
-            log.info("afterPropertiesSet: {}", state.name());
+            log.info("afterPropertiesSet: {}", initializationState.name());
         }
     }
 
     /**
      * Инициализация группы модулей
      */
-    protected abstract State initialize() throws Exception;
+    protected abstract InitializationState initialize() throws Exception;
 
-    public State getState() {
-        return state;
+    public InitializationState getInitializationState() {
+        return initializationState;
     }
 
     public String getName() {

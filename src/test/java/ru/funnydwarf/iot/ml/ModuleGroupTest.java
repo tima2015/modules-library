@@ -1,10 +1,6 @@
 package ru.funnydwarf.iot.ml;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +15,12 @@ class ModuleGroupTest {
         ModuleGroup group = new ModuleGroup("niceTestGroupName",
                 "niceTestGroupDescription") {
             @Override
-            protected State initialize() throws Exception {
+            protected InitializationState initialize() throws Exception {
                 log.debug("initialize() called with: group1 = [{}]", this);
-                return State.OK;
+                return InitializationState.OK;
             }
         };
-        assertEquals(group.getState(), ModuleGroup.State.OK);
+        assertEquals(group.getInitializationState(), InitializationState.OK);
     }
 
     @Test
@@ -32,11 +28,11 @@ class ModuleGroupTest {
         ModuleGroup group = new ModuleGroup("badTestGroupName", "badTestGroupDescription") {
 
             @Override
-            protected State initialize() throws Exception {
+            protected InitializationState initialize() throws Exception {
                 log.debug("initialize() called with: group1 = [{}]", this);
                 throw new RuntimeException("this is a bad test");
             }
         };
-        assertEquals(group.getState(), ModuleGroup.State.INITIALIZATION_ERROR);
+        assertEquals(group.getInitializationState(), InitializationState.INITIALIZATION_ERROR);
     }
 }

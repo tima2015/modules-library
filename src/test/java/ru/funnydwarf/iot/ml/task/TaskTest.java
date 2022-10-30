@@ -1,13 +1,10 @@
 package ru.funnydwarf.iot.ml.task;
 
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.ModuleGroup;
+import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.task.command.TaskCommand;
 import ru.funnydwarf.iot.ml.Module;
 
@@ -22,8 +19,8 @@ class TaskTest {
 
     private ModuleGroup group = new ModuleGroup("testGroupname", "testGroupDescription") {
         @Override
-        protected ModuleGroup.State initialize() throws Exception {
-            return State.OK;
+        protected InitializationState initialize() throws Exception {
+            return InitializationState.OK;
         }
     };
 
