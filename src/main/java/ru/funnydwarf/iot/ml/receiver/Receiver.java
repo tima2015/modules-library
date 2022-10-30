@@ -2,6 +2,7 @@ package ru.funnydwarf.iot.ml.receiver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
 import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.receiver.writer.Writer;
@@ -37,6 +38,10 @@ public class Receiver extends Module {
      */
     public void write(Object value) {
         log.debug("write() called with: value = [{}]", value);
+        if (getInitializationState() == InitializationState.NOT_INITIALIZED){
+            log.warn("write: module have initialization error! Pass...");
+            return;
+        }
         lastValue = value;
         try {
             writer.write(getAddress(), value);

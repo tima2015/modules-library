@@ -87,4 +87,7 @@ public abstract class Module implements InitializingBean {
         return description;
     }
 
+    public InitializationState getInitializationState() {
+        return initializationState;
+    }
 }

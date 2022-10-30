@@ -2,6 +2,7 @@ package ru.funnydwarf.iot.ml.sensor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
 import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.sensor.dataio.DataInput;
@@ -80,6 +81,10 @@ public class Sensor extends Module {
      */
     public void updateMeasurement() {
         log.debug("updateMeasurement() called");
+        if (getInitializationState() == InitializationState.NOT_INITIALIZED){
+            log.warn("updateMeasurement: module have initialization error! Pass...");
+            return;
+        }
         try {
             measurementData = reader.read(getAddress());
             if (dataOutput == null) {
