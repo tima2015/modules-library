@@ -8,7 +8,7 @@ public interface Reader {
      * @param address адрес датчика
      * @return массив замеров для всех датчиков устройства
      */
-    MeasurementData[] read(Object address);
+    MeasurementData[] read(Object address, Object ... args);
 
     /**
      * @return шаблон массива замеров без актуальных данных с датчиков

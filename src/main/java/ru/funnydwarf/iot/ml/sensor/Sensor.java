@@ -38,6 +38,11 @@ public class Sensor extends Module {
      */
     private final DataOutput dataOutput;
 
+    /**
+     * Аргументы для читателя
+     */
+    private Object[] readerArgs = new Object[0];
+
     public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description) {
         super(group, address, name, description);
         log = LoggerFactory.getLogger(name);
@@ -51,8 +56,17 @@ public class Sensor extends Module {
         }
     }
 
+    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description, Object ... readerArgs){
+        this(reader, dataInput, dataOutput, group, address, name, description);
+        this.readerArgs = readerArgs;
+    }
+
     public MeasurementData[] getMeasurementData() {
         return measurementData;
+    }
+
+    public Object[] getReaderArgs() {
+        return readerArgs;
     }
 
     /**
@@ -86,7 +100,7 @@ public class Sensor extends Module {
             return;
         }
         try {
-            measurementData = reader.read(getAddress());
+            measurementData = reader.read(getAddress(), readerArgs);
             if (dataOutput == null) {
                 return;
             }
