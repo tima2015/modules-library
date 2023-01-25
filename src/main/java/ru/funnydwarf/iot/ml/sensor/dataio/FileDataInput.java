@@ -39,7 +39,7 @@ public class FileDataInput implements DataInput{
         log.debug("read() called with: measurementId = [{}], unit = [{}], offset = [{}], length = [{}]",
                 measurementId, unit, offset, length);
 
-        File[] files = getMeasurementFiles(new File(destination + measurementId));
+        File[] files = getMeasurementFiles(new File(destination + '/' + measurementId));
         if (files.length == 0) {
             return new MeasurementData[0];
         }
