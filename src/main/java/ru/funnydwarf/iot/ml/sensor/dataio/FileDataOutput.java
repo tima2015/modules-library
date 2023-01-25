@@ -59,7 +59,7 @@ public class FileDataOutput implements DataOutput{
     private File prepareDirectory(String measurementId) {
         log.trace("prepareDirectory() called with: measurementId = [{}]", measurementId);
         File directory = new File(destination + '/' + measurementId);
-        if (!directory.exists() || directory.isDirectory()){
+        if (!directory.exists() || !directory.isDirectory()){
             if (directory.mkdirs()) {
                 log.info("directory for {} was created", measurementId);
             } else {
