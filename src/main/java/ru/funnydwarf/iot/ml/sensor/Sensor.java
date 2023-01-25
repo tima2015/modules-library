@@ -1,5 +1,8 @@
 package ru.funnydwarf.iot.ml.sensor;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.InitializationState;
@@ -14,8 +17,10 @@ import java.io.IOException;
 /**
  * Сенсор/Датчик
  */
+@Getter
+@Slf4j
 public class Sensor extends Module {
-    private final Logger log;
+
     /**
      * Данные последних замеров
      */
@@ -23,19 +28,23 @@ public class Sensor extends Module {
     /**
      * Идентификаторы замеров
      */
+    @Getter(AccessLevel.NONE)
     private final String[] measurementIDs;
 
     /**
      * Читающий показания датчика
      */
+    @Getter(AccessLevel.NONE)
     private final Reader reader;
     /**
      * Ввод данных для просмотра информации о замерах
      */
+    @Getter(AccessLevel.NONE)
     private final DataInput dataInput;
     /**
      * Вывод данных для сохранения замеров
      */
+    @Getter(AccessLevel.NONE)
     private final DataOutput dataOutput;
 
     /**
@@ -45,7 +54,6 @@ public class Sensor extends Module {
 
     public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description) {
         super(group, address, name, description);
-        log = LoggerFactory.getLogger(name);
         this.reader = reader;
         this.dataInput = dataInput;
         this.dataOutput = dataOutput;
@@ -61,14 +69,6 @@ public class Sensor extends Module {
         this.readerArgs = readerArgs;
     }
 
-    public MeasurementData[] getMeasurementData() {
-        return measurementData;
-    }
-
-    public Object[] getReaderArgs() {
-        return readerArgs;
-    }
-
     /**
      * Просмотреть историю замеров
      * @param offset отступ в количестве замеров от последнего замера
@@ -76,7 +76,7 @@ public class Sensor extends Module {
      * @return массив замеров начинающихся с offset-того замера (от последнего замера) и размера length
      */
     public MeasurementData[][] getHistoryMeasurementValue(int offset, int length){
-        log.debug("getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", offset, length);
+        log.debug("[{}] getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", getName(), offset, length);
         MeasurementData[][] history = new MeasurementData[measurementData.length][];
         try {
             for (int i = 0; i < history.length; i++) {
@@ -85,7 +85,7 @@ public class Sensor extends Module {
             }
             return history;
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("[{}] {}", getName(), e.getMessage(), e);
         }
         return new MeasurementData[0][0];
     }
@@ -94,9 +94,9 @@ public class Sensor extends Module {
      * Выполнить получение новых замеров и записать полученные данные в хранилище
      */
     public void updateMeasurement() {
-        log.debug("updateMeasurement() called");
+        log.debug("[{}] updateMeasurement() called", getName());
         if (getInitializationState() == InitializationState.NOT_INITIALIZED){
-            log.warn("updateMeasurement: module have initialization error! Pass...");
+            log.warn("[{}] updateMeasurement: module have initialization error! Pass...", getName());
             return;
         }
         try {
@@ -108,7 +108,7 @@ public class Sensor extends Module {
                 dataOutput.write(measurementData[i], measurementIDs[i]);
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.error("[{}] {}", getName(), e.getMessage(), e);
             measurementData = new MeasurementData[0];
         }
     }

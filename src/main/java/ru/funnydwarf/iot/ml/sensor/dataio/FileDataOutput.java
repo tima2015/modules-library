@@ -1,5 +1,6 @@
 package ru.funnydwarf.iot.ml.sensor.dataio;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,8 @@ import java.util.Date;
  * Вывод данных замеров в хранилище в виде файла
  */
 @Component
+@Slf4j
 public class FileDataOutput implements DataOutput{
-
-    private static final Logger log = LoggerFactory.getLogger(FileDataOutput.class);
-
     private final String destination;
     private final DateFormat timeFormat;
     private final DateFormat dateFormat;

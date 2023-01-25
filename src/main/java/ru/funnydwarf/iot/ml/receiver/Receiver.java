@@ -1,5 +1,8 @@
 package ru.funnydwarf.iot.ml.receiver;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.InitializationState;
@@ -10,9 +13,10 @@ import ru.funnydwarf.iot.ml.receiver.writer.Writer;
 /**
  * Приёмщик
  */
+@Getter
+@Slf4j
 public class Receiver extends Module {
 
-    public final Logger log;
     /**
      * Последнее значение переданное приёмщику
      */
@@ -20,16 +24,12 @@ public class Receiver extends Module {
     /**
      * Объект писателя передающего значение модулю
      */
+    @Getter(AccessLevel.NONE)
     private final Writer writer;
 
     public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description) {
         super(group, address, name, description);
-        log = LoggerFactory.getLogger(name);
         this.writer = writer;
-    }
-
-    public Object getLastValue() {
-        return lastValue;
     }
 
     /**
@@ -37,9 +37,9 @@ public class Receiver extends Module {
      * @param value передаваемое модулю значение
      */
     public void write(Object value) {
-        log.debug("write() called with: value = [{}]", value);
+        log.debug("[{}] write() called with: value = [{}]", getName(), value);
         if (getInitializationState() == InitializationState.NOT_INITIALIZED){
-            log.warn("write: module have initialization error! Pass...");
+            log.warn("[{}] write: module have initialization error! Pass...", getName());
             return;
         }
         lastValue = value;

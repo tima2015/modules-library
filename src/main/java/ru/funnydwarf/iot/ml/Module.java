@@ -1,5 +1,7 @@
 package ru.funnydwarf.iot.ml;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -15,9 +17,9 @@ import java.util.Properties;
 /**
  * Класс модуля
  */
+@Getter
+@Slf4j
 public abstract class Module implements InitializingBean {
-
-    private final Logger log;
 
     /**
      * Группа к которой относится данный модуль
@@ -50,7 +52,6 @@ public abstract class Module implements InitializingBean {
                   Object address,
                   String name,
                   String description) {
-        log = LoggerFactory.getLogger(name);
         this.group = group;
         this.address = address;
         this.name = name;
@@ -61,13 +62,13 @@ public abstract class Module implements InitializingBean {
     private void loadProperties() {
         File propertiesFile = new File("properties/%s.xml".formatted(name));
         if (!propertiesFile.exists()) {
-            log.debug("loadProperties: Module does not have a settings file");
+            log.debug("[{}] loadProperties: Module does not have a settings file", name);
             return;
         }
         try {
             properties.loadFromXML(new FileInputStream(propertiesFile));
         } catch (IOException e) {
-            log.warn("loadProperties: can't load properties!");
+            log.warn("[{}] loadProperties: can't load properties!", name);
             log.warn(e.getMessage(), e);
         }
     }
@@ -76,16 +77,16 @@ public abstract class Module implements InitializingBean {
     public void afterPropertiesSet() {
         log.debug("afterPropertiesSet() called");
         if (initializationState != InitializationState.NOT_INITIALIZED) {
-            log.warn("afterPropertiesSet: Module already init! Pass...");
+            log.warn("[{}] afterPropertiesSet: Module already init! Pass...", name);
             return;
         }
         try {
             initializationState = initialize();
         } catch (Exception e) {
             initializationState = InitializationState.INITIALIZATION_ERROR;
-            log.error(e.getMessage(), e);
+            log.error("[{}] {}",name, e.getMessage(), e);
         } finally {
-            log.info("afterPropertiesSet: {}", initializationState.name());
+            log.info("[{}] afterPropertiesSet: {}", name, initializationState.name());
         }
     }
 
@@ -96,27 +97,4 @@ public abstract class Module implements InitializingBean {
         return InitializationState.OK;
     }
 
-    public ModuleGroup getGroup() {
-        return group;
-    }
-
-    public Object getAddress() {
-        return address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public InitializationState getInitializationState() {
-        return initializationState;
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
 }

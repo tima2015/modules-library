@@ -31,7 +31,7 @@ public class TimerTrigger extends Trigger implements SchedulingConfigurer {
                     Optional.ofNullable(triggerContext.lastCompletionTime());
             Instant nextExecutionTime =
                     lastCompletionTime.orElseGet(Date::new).toInstant().plusMillis(timeToRepeat);
-            return Date.from(nextExecutionTime);
+            return Date.from(nextExecutionTime).toInstant();
         });
     }
 }
