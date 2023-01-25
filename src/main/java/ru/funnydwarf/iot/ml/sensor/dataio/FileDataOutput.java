@@ -43,7 +43,7 @@ public class FileDataOutput implements DataOutput{
         Date date = new Date();
         Path path = new File(directory + "/" + dateFormat.format(date) + ".smd").toPath();
         Files.writeString(path,
-                timeFormat.format(date) + '\t' + data + '\n',
+                timeFormat.format(date) + '\t' + data.value() + '\n',
                 StandardOpenOption.CREATE,
                 StandardOpenOption.WRITE,
                 StandardOpenOption.APPEND);
