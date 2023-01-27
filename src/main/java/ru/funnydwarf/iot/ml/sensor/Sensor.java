@@ -3,16 +3,12 @@ package ru.funnydwarf.iot.ml.sensor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
 import ru.funnydwarf.iot.ml.ModuleGroup;
-import ru.funnydwarf.iot.ml.sensor.dataio.DataInput;
-import ru.funnydwarf.iot.ml.sensor.dataio.DataOutput;
 import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Сенсор/Датчик
@@ -37,26 +33,19 @@ public class Sensor extends Module {
     @Getter(AccessLevel.NONE)
     private final Reader reader;
     /**
-     * Ввод данных для просмотра информации о замерах
+     * Список с историей замеров
      */
-    @Getter(AccessLevel.NONE)
-    private final DataInput dataInput;
-    /**
-     * Вывод данных для сохранения замеров
-     */
-    @Getter(AccessLevel.NONE)
-    private final DataOutput dataOutput;
+    private final List<MeasurementData>[] measurementDataList;
 
     /**
      * Аргументы для читателя
      */
     private Object[] readerArgs = new Object[0];
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description) {
+    public Sensor(Reader reader, List<MeasurementData>[] measurementDataList, ModuleGroup group, Object address, String name, String description) {
         super(group, address, name, description);
         this.reader = reader;
-        this.dataInput = dataInput;
-        this.dataOutput = dataOutput;
+        this.measurementDataList = measurementDataList;
         measurementData = reader.getTemplateRead();
         measurementIDs = new String[measurementData.length];
         for (int i = 0; i < measurementData.length; i++) {
@@ -64,30 +53,13 @@ public class Sensor extends Module {
         }
     }
 
-    public Sensor(Reader reader, DataInput dataInput, DataOutput dataOutput, ModuleGroup group, Object address, String name, String description, Object ... readerArgs){
-        this(reader, dataInput, dataOutput, group, address, name, description);
+    public Sensor(Reader reader, List<MeasurementData>[] measurementDataList, ModuleGroup group, Object address, String name, String description, Object ... readerArgs){
+        this(reader, measurementDataList, group, address, name, description);
         this.readerArgs = readerArgs;
     }
 
-    /**
-     * Просмотреть историю замеров
-     * @param offset отступ в количестве замеров от последнего замера
-     * @param length количество возвращаемых замеров
-     * @return массив замеров начинающихся с offset-того замера (от последнего замера) и размера length
-     */
-    public MeasurementData[][] getHistoryMeasurementValue(int offset, int length){
-        log.debug("[{}] getHistoryMeasurementValue() called with: offset = [{}], length = [{}]", getName(), offset, length);
-        MeasurementData[][] history = new MeasurementData[measurementData.length][];
-        try {
-            for (int i = 0; i < history.length; i++) {
-                MeasurementData data = measurementData[i];
-                history[i] = dataInput.read(measurementIDs[i], data.measurementName(), data.unitName(), offset, length);
-            }
-            return history;
-        } catch (IOException e) {
-            log.error("[{}] {}", getName(), e.getMessage(), e);
-        }
-        return new MeasurementData[0][0];
+    public Sensor(Reader reader, ModuleGroup group, Object address, String name, String description, Object... readerArgs){
+        this(reader, null, group, address, name, description, readerArgs);
     }
 
     /**
@@ -101,11 +73,11 @@ public class Sensor extends Module {
         }
         try {
             measurementData = reader.read(getAddress(), readerArgs);
-            if (dataOutput == null) {
+            if (measurementDataList == null){
                 return;
             }
-            for (int i = 0; i < measurementData.length; i++) {
-                dataOutput.write(measurementData[i], measurementIDs[i]);
+            for (int i = 0; i < measurementDataList.length; i++) {
+                measurementDataList[i].add(measurementData[i]);
             }
         } catch (Exception e) {
             log.error("[{}] {}", getName(), e.getMessage(), e);
