@@ -26,14 +26,11 @@ import java.util.function.Predicate;
 @Deprecated
 public class FileMeasurementDataList extends ArrayList<MeasurementData> {
 
-    @Value("${FileMeasurementDataList.dataDir:collectedData}")
-    private static String dataDir;
-    @Value("${FileMeasurementDataList.dateFormat:yyyy-MM-dd HH:mm:ss}")
-    private static String datePattern;
+    private static String dataDir = "collectedData";
 
     private final File file;
     @Getter(AccessLevel.NONE)
-    private final DateFormat dateFormat = new SimpleDateFormat(datePattern);
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final MeasurementData prototypeMeasurement;
 
     public FileMeasurementDataList(MeasurementData template) {
@@ -49,7 +46,7 @@ public class FileMeasurementDataList extends ArrayList<MeasurementData> {
      * @return подготовленную директорию
      */
     private File prepareDataDir() {
-        File dataDir = new File(FileMeasurementDataList.dataDir);
+        File dataDir = new File("collectedData");
         if (!dataDir.exists() || !dataDir.isDirectory()) {
             if (dataDir.mkdirs()) {
                 log.info("dataDir was created");
