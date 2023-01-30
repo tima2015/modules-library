@@ -27,8 +27,9 @@ public class TimerTrigger extends Trigger implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(Executors.newSingleThreadScheduledExecutor());
         taskRegistrar.addTriggerTask(this::triggerAll, triggerContext -> {
+            Instant instant = triggerContext.lastCompletion();
             Optional<Date> lastCompletionTime =
-                    Optional.ofNullable(triggerContext.lastCompletionTime());
+                    Optional.of(instant == null ? new Date(0) : Date.from(instant));
             Instant nextExecutionTime =
                     lastCompletionTime.orElseGet(Date::new).toInstant().plusMillis(timeToRepeat);
             return Date.from(nextExecutionTime).toInstant();
