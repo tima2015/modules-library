@@ -17,7 +17,7 @@ class TaskTest {
 
     private static final Logger log = LoggerFactory.getLogger(TaskTest.class);
 
-    private ModuleGroup group = new ModuleGroup("testGroupname", "testGroupDescription") {
+    private ModuleGroup group = new ModuleGroup("testGroupName", "testGroupDescription") {
         @Override
         protected InitializationState initialize() throws Exception {
             return InitializationState.OK;

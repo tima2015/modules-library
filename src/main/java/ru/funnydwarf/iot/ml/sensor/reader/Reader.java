@@ -1,6 +1,6 @@
 package ru.funnydwarf.iot.ml.sensor.reader;
 
-import ru.funnydwarf.iot.ml.sensor.MeasurementData;
+import ru.funnydwarf.iot.ml.sensor.Measurement;
 
 public interface Reader {
     /**
@@ -8,11 +8,11 @@ public interface Reader {
      * @param address адрес датчика
      * @return массив замеров для всех датчиков устройства
      */
-    MeasurementData[] read(Object address, Object ... args);
+    Measurement[] read(Object address, Object ... args);
 
     /**
      * @return шаблон массива замеров без актуальных данных с датчиков
      */
-    MeasurementData[] getTemplateRead();
+    Measurement[] getTemplateRead();
 
 }

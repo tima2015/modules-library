@@ -2,16 +2,11 @@ package ru.funnydwarf.iot.ml;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Properties;
 
 /**

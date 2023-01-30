@@ -24,7 +24,7 @@ public class Task<T extends Module> {
     private boolean disable;
     private Date lastDone = null;
     /**
-     * Действие с модулями, которое должно произойти при событии активировавшем тригер
+     * Действие с модулями, которое должно произойти при событии активировавшем триггер
      */
     private final TaskCommand<T> listener;
     private final List<T> modules;
@@ -88,7 +88,7 @@ public class Task<T extends Module> {
     }
 
     /**
-     * @return неизменяемый список модулей обрабатываемых тригером
+     * @return неизменяемый список модулей обрабатываемых триггером
      */
     public List<T> getModules() {
         return Collections.unmodifiableList(modules);
