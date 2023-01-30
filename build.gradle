@@ -9,7 +9,7 @@ java {
 }
 
 group 'ru.funnydwarf.iot.ml'
-version '0.2.2'
+version '0.2.3'
 
 repositories {
     mavenCentral()
@@ -21,6 +21,7 @@ test {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot:3.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.2'
     implementation 'org.slf4j:slf4j-api:2.0.3'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
