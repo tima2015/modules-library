@@ -8,6 +8,10 @@ import ru.funnydwarf.iot.ml.Module;
 import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * Сенсор/Датчик
  */
@@ -41,6 +45,8 @@ public class Sensor extends Module {
      */
     private final Object[] readerArgs;
 
+    private final List<OnTakeMeasurementListener> onTakeMeasurementListeners = new ArrayList<>();
+
     public Sensor(Reader reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroup group, Object address, String name, String description, Object ... readerArgs){
         super(group, address, name, description);
         this.reader = reader;
@@ -50,7 +56,7 @@ public class Sensor extends Module {
     }
 
     /**
-     * Выполнить получение новых замеров и записать полученные данные в хранилище
+     * Выполнить получение новых замеров
      */
     public Measurement[] takeMeasurement() {
         log.debug("[{}] takeMeasurement() called", getName());
@@ -62,12 +68,20 @@ public class Sensor extends Module {
         try {
             double[] measurementValues = reader.read(getAddress(), readerArgs);
             measurements = new Measurement[measurementValues.length];
+
             for (int i = 0; i < measurementValues.length; i++) {
                 measurements[i] = new Measurement(measurementValues[i], measurementDescription[i], session.getSession());
             }
+
+            onTakeMeasurementListeners
+                    .forEach(onTakeMeasurementListener -> onTakeMeasurementListener.onTakeMeasurement(measurements));
         } catch (Exception e) {
             log.error("[{}] {}", getName(), e.getMessage(), e);
         }
         return measurements;
+    }
+
+    public interface OnTakeMeasurementListener {
+        void onTakeMeasurement(Measurement[] measurements);
     }
 }
