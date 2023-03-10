@@ -21,11 +21,11 @@ class TaskTest {
 
 
     private List<Module> plugModules = List.of(
-            new Module(group, 1, "module 1", "desc 1") {},
-            new Module(group, 1, "module 2", "desc 2") {},
-            new Module(group, 1, "module 3", "desc 3") {},
-            new Module(group, 1, "module 4", "desc 4") {},
-            new Module(group, 1, "module 5", "desc 5") {}
+            new Module(group, 1, "module 1", "desc 1", null) {},
+            new Module(group, 1, "module 2", "desc 2", null) {},
+            new Module(group, 1, "module 3", "desc 3", null) {},
+            new Module(group, 1, "module 4", "desc 4", null) {},
+            new Module(group, 1, "module 5", "desc 5", null) {}
     );
 
 

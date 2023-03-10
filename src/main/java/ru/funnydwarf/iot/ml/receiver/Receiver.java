@@ -25,8 +25,8 @@ public class Receiver extends Module {
     @Getter(AccessLevel.NONE)
     private final Writer writer;
 
-    public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description) {
-        super(group, address, name, description);
+    public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description, Initializer initializer) {
+        super(group, address, name, description, initializer);
         this.writer = writer;
     }
 

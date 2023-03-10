@@ -3,6 +3,7 @@ package ru.funnydwarf.iot.ml.sensor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
 import ru.funnydwarf.iot.ml.ModuleGroup;
@@ -47,8 +48,8 @@ public class Sensor extends Module {
 
     private final List<OnTakeMeasurementListener> onTakeMeasurementListeners = new ArrayList<>();
 
-    public Sensor(Reader reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroup group, Object address, String name, String description, Object ... readerArgs){
-        super(group, address, name, description);
+    public Sensor(Reader reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroup group, Object address, String name, String description, @Nullable Initializer initializer, Object ... readerArgs){
+        super(group, address, name, description, initializer);
         this.reader = reader;
         this.measurementDescription = measurementDescription;
         this.session = session;

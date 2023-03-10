@@ -1,8 +1,10 @@
 package ru.funnydwarf.iot.ml;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.lang.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,16 +43,21 @@ public abstract class Module implements InitializingBean {
      */
     private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
 
+    @Getter(AccessLevel.NONE)
+    private Initializer initializer;
+
     private final Properties properties = new Properties();
 
     public Module(ModuleGroup group,
                   Object address,
                   String name,
-                  String description) {
+                  String description,
+                  @Nullable Initializer initializer) {
         this.group = group;
         this.address = address;
         this.name = name;
         this.description = description;
+        this.initializer = initializer;
         loadProperties();
     }
 
@@ -89,7 +96,11 @@ public abstract class Module implements InitializingBean {
      * Инициализация модуля
      */
     protected InitializationState initialize() throws Exception {
-        return InitializationState.OK;
+        return initializer != null ? initializer.initialize() : InitializationState.OK;
+    }
+
+    public static interface Initializer {
+        InitializationState initialize();
     }
 
 }
