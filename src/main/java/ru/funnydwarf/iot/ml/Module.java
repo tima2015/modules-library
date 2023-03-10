@@ -96,11 +96,11 @@ public abstract class Module implements InitializingBean {
      * Инициализация модуля
      */
     protected InitializationState initialize() throws Exception {
-        return initializer != null ? initializer.initialize() : InitializationState.OK;
+        return initializer != null ? initializer.initialize(address) : InitializationState.OK;
     }
 
     public static interface Initializer {
-        InitializationState initialize();
+        InitializationState initialize(Object address);
     }
 
 }
