@@ -1,7 +1,6 @@
 package ru.funnydwarf.iot.ml.sensor;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 

@@ -11,7 +11,6 @@ import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Сенсор/Датчик
