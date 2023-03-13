@@ -5,6 +5,10 @@ package ru.funnydwarf.iot.ml;
  */
 public enum InitializationState {
     /**
+     * Не подключено
+     */
+    NOT_CONNECTED,
+    /**
      * Начальное состояние
      */
     NOT_INITIALIZED,

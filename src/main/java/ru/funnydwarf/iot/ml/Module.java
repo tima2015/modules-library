@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -44,7 +45,7 @@ public abstract class Module implements InitializingBean {
     private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
 
     @Getter(AccessLevel.NONE)
-    private Initializer initializer;
+    private final Initializer initializer;
 
     private final Properties properties = new Properties();
 
@@ -96,6 +97,12 @@ public abstract class Module implements InitializingBean {
      * Инициализация модуля
      */
     protected InitializationState initialize() throws Exception {
+        if (group instanceof ModuleListReadable) {
+            List<Object> moduleList = ((ModuleListReadable) group).readModuleAdressesList();
+            if (!moduleList.equals(address)) {
+                return InitializationState.NOT_CONNECTED;
+            }
+        }
         return initializer != null ? initializer.initialize(this) : InitializationState.OK;
     }
 
