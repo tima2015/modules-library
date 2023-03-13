@@ -99,7 +99,7 @@ public abstract class Module implements InitializingBean {
     protected InitializationState initialize() throws Exception {
         if (group instanceof ModuleListReadable) {
             List<Object> moduleList = ((ModuleListReadable) group).readModuleAdressesList();
-            if (!moduleList.equals(address)) {
+            if (!moduleList.contains(address)) {
                 return InitializationState.NOT_CONNECTED;
             }
         }
