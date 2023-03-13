@@ -100,10 +100,18 @@ public abstract class Module implements InitializingBean {
         if (group instanceof ModuleListReadable) {
             List<Object> moduleList = ((ModuleListReadable) group).readModuleAdressesList();
             if (!moduleList.contains(address)) {
+                log.warn("[{}] initialize: module not connected!", name);
                 return InitializationState.NOT_CONNECTED;
             }
         }
-        return initializer != null ? initializer.initialize(this) : InitializationState.OK;
+        if (initializer != null) {
+            InitializationState state = initializer.initialize(this);
+            if (state != InitializationState.OK) {
+                log.warn("[{}] initialize: module have initialization error!", name);
+            }
+            return state;
+        }
+        return InitializationState.OK;
     }
 
     public static interface Initializer {

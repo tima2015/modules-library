@@ -62,7 +62,11 @@ public class Sensor extends Module {
         log.debug("[{}] takeMeasurement() called", getName());
         measurements = new Measurement[0];
         if (getInitializationState() == InitializationState.NOT_INITIALIZED){
-            log.warn("[{}] takeMeasurement: module have initialization error! Pass...", getName());
+            log.debug("[{}] takeMeasurement: module have initialization error! Pass...", getName());
+            return measurements;
+        }
+        if (getInitializationState() == InitializationState.NOT_CONNECTED) {
+            log.debug("[{}] takeMeasurement: module not connected! Pass...", getName());
             return measurements;
         }
         try {
