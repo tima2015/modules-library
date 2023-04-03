@@ -17,17 +17,17 @@ import java.util.Properties;
  */
 @Getter
 @Slf4j
-public abstract class Module implements InitializingBean {
+public abstract class Module<ModuleGroupT extends ModuleGroup, AddressT> implements InitializingBean {
 
     /**
      * Группа к которой относится данный модуль
      */
-    private final ModuleGroup group;
+    private final ModuleGroupT group;
 
     /**
      * Каждый модуль в каком либо представлении имеет свой адрес
      */
-    private final Object address;
+    private final AddressT address;
 
     /**
      * Имя модуля
@@ -49,8 +49,8 @@ public abstract class Module implements InitializingBean {
 
     private final Properties properties = new Properties();
 
-    public Module(ModuleGroup group,
-                  Object address,
+    public Module(ModuleGroupT group,
+                  AddressT address,
                   String name,
                   String description,
                   @Nullable Initializer initializer) {
@@ -114,8 +114,8 @@ public abstract class Module implements InitializingBean {
         return InitializationState.OK;
     }
 
-    public static interface Initializer {
-        InitializationState initialize(Module module);
+    public interface Initializer {
+        InitializationState initialize(Module<?,?> module);
     }
 
 }

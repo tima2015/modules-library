@@ -13,7 +13,7 @@ import ru.funnydwarf.iot.ml.receiver.writer.Writer;
  */
 @Getter
 @Slf4j
-public class Receiver extends Module {
+public class Receiver <WriterT extends Writer, ModuleGroupT extends ModuleGroup, AddressT> extends Module<ModuleGroupT, AddressT> {
 
     /**
      * Последнее значение переданное приёмщику
@@ -23,9 +23,9 @@ public class Receiver extends Module {
      * Объект писателя передающего значение модулю
      */
     @Getter(AccessLevel.NONE)
-    private final Writer writer;
+    private final WriterT writer;
 
-    public Receiver(Writer writer, ModuleGroup group, Object address, String name, String description, Initializer initializer) {
+    public Receiver(WriterT writer, ModuleGroupT group, AddressT address, String name, String description, Initializer initializer) {
         super(group, address, name, description, initializer);
         this.writer = writer;
     }
