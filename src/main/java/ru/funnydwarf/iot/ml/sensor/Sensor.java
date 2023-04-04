@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Slf4j
-public class Sensor extends Module {
+public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<ModuleGroupT, AddressT> {
 
     /**
      * Данные последних замеров
@@ -28,7 +28,7 @@ public class Sensor extends Module {
      * Читающий показания датчика
      */
     @Getter(AccessLevel.NONE)
-    private final Reader reader;
+    private final Reader<AddressT> reader;
 
     /**
      * Свойства замеров проводимых сенсором
@@ -47,7 +47,7 @@ public class Sensor extends Module {
 
     private final List<OnTakeMeasurementListener> onTakeMeasurementListeners = new ArrayList<>();
 
-    public Sensor(Reader reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroup group, Object address, String name, String description, @Nullable Initializer initializer, Object ... readerArgs){
+    public Sensor(Reader<AddressT> reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroupT group, AddressT address, String name, String description, @Nullable Initializer initializer, Object ... readerArgs){
         super(group, address, name, description, initializer);
         this.reader = reader;
         this.measurementDescription = measurementDescription;
