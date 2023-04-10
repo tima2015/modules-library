@@ -7,6 +7,9 @@ import lombok.*;
 
 import java.util.Objects;
 
+/**
+ * Свойства замеров проводимых сенсором
+ */
 @Entity
 @NoArgsConstructor
 @Getter

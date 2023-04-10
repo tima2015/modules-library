@@ -23,21 +23,18 @@ public class Measurement {
     private long id;
     private double value;
     private Date measurementDate;
-    @ManyToOne
-    private MeasurementDescription description;
 
     @ManyToOne
-    private MeasurementSession session;
+    private MeasurementData measurementData;
 
-    public Measurement(double value, MeasurementDescription description, MeasurementSession session, Date measurementDate) {
+    public Measurement(double value, Date measurementDate, MeasurementData measurementData) {
         this.value = value;
-        this.description = description;
         this.measurementDate = measurementDate;
-        this.session = session;
+        this.measurementData = measurementData;
     }
 
-    public Measurement(double value, MeasurementDescription description, MeasurementSession session) {
-        this(value, description, session, new Date());
+    public Measurement(double value, MeasurementData measurementData) {
+        this(value, new Date(), measurementData);
     }
 
     @Override
@@ -45,11 +42,11 @@ public class Measurement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Measurement that = (Measurement) o;
-        return id == that.id && Double.compare(that.value, value) == 0 && measurementDate.equals(that.measurementDate) && description.equals(that.description) && session.equals(that.session);
+        return id == that.id && Double.compare(that.value, value) == 0 && measurementDate.equals(that.measurementDate) && measurementData.equals(that.measurementData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, value, measurementDate, description, session);
+        return Objects.hash(id, value, measurementDate, measurementData);
     }
 }

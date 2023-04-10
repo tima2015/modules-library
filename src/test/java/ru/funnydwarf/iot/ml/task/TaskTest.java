@@ -10,23 +10,5 @@ import java.util.List;
 
 class TaskTest {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskTest.class);
-
-    private ModuleGroup group = new ModuleGroup("testGroupName", "testGroupDescription") {
-        @Override
-        protected InitializationState initialize() throws Exception {
-            return InitializationState.OK;
-        }
-    };
-
-
-    private List<Module> plugModules = List.of(
-            new Module(group, 1, "module 1", "desc 1", null) {},
-            new Module(group, 1, "module 2", "desc 2", null) {},
-            new Module(group, 1, "module 3", "desc 3", null) {},
-            new Module(group, 1, "module 4", "desc 4", null) {},
-            new Module(group, 1, "module 5", "desc 5", null) {}
-    );
-
 
 }

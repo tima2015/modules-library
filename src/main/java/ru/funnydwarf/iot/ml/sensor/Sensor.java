@@ -3,9 +3,11 @@ package ru.funnydwarf.iot.ml.sensor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.lang.Nullable;
 import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.ModuleDescription;
 import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.sensor.reader.Reader;
 
@@ -30,10 +32,9 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
     @Getter(AccessLevel.NONE)
     private final Reader<AddressT> reader;
 
-    /**
-     * Свойства замеров проводимых сенсором
-     */
-    private final MeasurementDescription[] measurementDescription;
+    private final MeasurementData[] measurementData;
+
+    private final MeasurementDataRepository mdr;
 
     /**
      * Контейнер актуальной информации о текущей сессии
@@ -47,42 +48,60 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
 
     private final List<OnTakeMeasurementListener> onTakeMeasurementListeners = new ArrayList<>();
 
-    public Sensor(Reader<AddressT> reader, MeasurementDescription[] measurementDescription, CurrentMeasurementSession session, ModuleGroupT group, AddressT address, String name, String description, @Nullable Initializer initializer, Object ... readerArgs){
-        super(group, address, name, description, initializer);
+    public Sensor(Reader<AddressT> reader, MeasurementData[] measurementData, MeasurementDataRepository mdr, CurrentMeasurementSession session, ModuleGroupT group, AddressT address, ModuleDescription moduleDescription, @Nullable Initializer initializer, Object ... readerArgs){
+        super(group, address, moduleDescription, initializer);
         this.reader = reader;
-        this.measurementDescription = measurementDescription;
+        this.mdr = mdr;
         this.session = session;
         this.readerArgs = readerArgs;
+        this.measurementData = measurementData;
+    }
+
+    private boolean checkSensor() {
+        if (getInitializationState() == InitializationState.NOT_INITIALIZED){
+            log.debug("[{}] takeMeasurement: module have initialization error! Pass...", getModuleDescription().getName());
+            return true;
+        }
+        if (getInitializationState() == InitializationState.NOT_CONNECTED) {
+            log.debug("[{}] takeMeasurement: module not connected! Pass...", getModuleDescription().getName());
+            return true;
+        }
+        return false;
+    }
+
+    private void checkSession() {
+        if (!session.getSession().equals(measurementData[0].getSession())){
+            return;
+        }
+        for (int i = 0; i < measurementData.length; i++) {
+            measurementData[i] = MeasurementDataRepository.findOrCreate(mdr, measurementData[i].getMeasurementDescription(), session.getSession(), measurementData[i].getModuleDescription());
+        }
+    }
+
+    private void readMeasurements() {
+        double[] measurementValues = reader.read(getAddress(), readerArgs);
+        measurements = new Measurement[measurementValues.length];
+
+        for (int i = 0; i < measurementValues.length; i++) {
+            measurements[i] = new Measurement(measurementValues[i], measurementData[i]);
+        }
     }
 
     /**
      * Выполнить получение новых замеров
      */
     public Measurement[] takeMeasurement() {
-        log.debug("[{}] takeMeasurement() called", getName());
-        measurements = new Measurement[0];
-        if (getInitializationState() == InitializationState.NOT_INITIALIZED){
-            log.debug("[{}] takeMeasurement: module have initialization error! Pass...", getName());
-            return measurements;
-        }
-        if (getInitializationState() == InitializationState.NOT_CONNECTED) {
-            log.debug("[{}] takeMeasurement: module not connected! Pass...", getName());
-            return measurements;
+        log.debug("[{}] takeMeasurement() called", getModuleDescription().getName());
+        if (checkSensor()) {
+            return measurements = new Measurement[0];
         }
         try {
-            double[] measurementValues = reader.read(getAddress(), readerArgs);
-            measurements = new Measurement[measurementValues.length];
-
-            for (int i = 0; i < measurementValues.length; i++) {
-                measurements[i] = new Measurement(measurementValues[i], measurementDescription[i], session.getSession());
-            }
-
-            onTakeMeasurementListeners
-                    .forEach(onTakeMeasurementListener -> onTakeMeasurementListener.onTakeMeasurement(measurements));
+            readMeasurements();
+            onTakeMeasurementListeners.forEach(onTakeMeasurementListener -> onTakeMeasurementListener.onTakeMeasurement(measurements));
         } catch (Exception e) {
-            log.error("[{}] {}", getName(), e.getMessage(), e);
+            log.error("[{}] {}", getModuleDescription().getName(), e.getMessage(), e);
         }
-        return measurements;
+        return measurements = new Measurement[0];
     }
 
     public interface OnTakeMeasurementListener {

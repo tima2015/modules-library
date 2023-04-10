@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
+import ru.funnydwarf.iot.ml.ModuleDescription;
 import ru.funnydwarf.iot.ml.ModuleGroup;
 import ru.funnydwarf.iot.ml.receiver.writer.Writer;
 
@@ -25,8 +26,8 @@ public class Receiver <WriterT extends Writer, ModuleGroupT extends ModuleGroup,
     @Getter(AccessLevel.NONE)
     private final WriterT writer;
 
-    public Receiver(WriterT writer, ModuleGroupT group, AddressT address, String name, String description, Initializer initializer) {
-        super(group, address, name, description, initializer);
+    public Receiver(WriterT writer, ModuleGroupT group, AddressT address, ModuleDescription moduleDescription, Initializer initializer) {
+        super(group, address, moduleDescription, initializer);
         this.writer = writer;
     }
 
@@ -35,9 +36,9 @@ public class Receiver <WriterT extends Writer, ModuleGroupT extends ModuleGroup,
      * @param value передаваемое модулю значение
      */
     public void write(Object value) {
-        log.debug("[{}] write() called with: value = [{}]", getName(), value);
+        log.debug("[{}] write() called with: value = [{}]", getModuleDescription().getName(), value);
         if (getInitializationState() == InitializationState.NOT_INITIALIZED){
-            log.warn("[{}] write: module have initialization error! Pass...", getName());
+            log.warn("[{}] write: module have initialization error! Pass...", getModuleDescription().getName());
             return;
         }
         lastValue = value;

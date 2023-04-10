@@ -1,5 +1,6 @@
 package ru.funnydwarf.iot.ml;
 
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +30,7 @@ public abstract class Module<ModuleGroupT extends ModuleGroup, AddressT> impleme
      */
     private final AddressT address;
 
-    /**
-     * Имя модуля
-     */
-    private final String name;
-
-    /**
-     * Описание модуля
-     */
-    private final String description;
+    private final ModuleDescription moduleDescription;
 
     /**
      * Состояние инициализации модуля
@@ -51,27 +44,25 @@ public abstract class Module<ModuleGroupT extends ModuleGroup, AddressT> impleme
 
     public Module(ModuleGroupT group,
                   AddressT address,
-                  String name,
-                  String description,
+                  ModuleDescription moduleDescription,
                   @Nullable Initializer initializer) {
         this.group = group;
         this.address = address;
-        this.name = name;
-        this.description = description;
+        this.moduleDescription = moduleDescription;
         this.initializer = initializer;
         loadProperties();
     }
 
     private void loadProperties() {
-        File propertiesFile = new File("properties/%s.xml".formatted(name));
+        File propertiesFile = new File("properties/%s.xml".formatted(moduleDescription.getName()));
         if (!propertiesFile.exists()) {
-            log.debug("[{}] loadProperties: Module does not have a settings file", name);
+            log.debug("[{}] loadProperties: Module does not have a settings file", moduleDescription.getName());
             return;
         }
         try {
             properties.loadFromXML(new FileInputStream(propertiesFile));
         } catch (IOException e) {
-            log.warn("[{}] loadProperties: can't load properties!", name);
+            log.warn("[{}] loadProperties: can't load properties!", moduleDescription.getName());
             log.warn(e.getMessage(), e);
         }
     }
@@ -80,16 +71,16 @@ public abstract class Module<ModuleGroupT extends ModuleGroup, AddressT> impleme
     public void afterPropertiesSet() {
         log.debug("afterPropertiesSet() called");
         if (initializationState != InitializationState.NOT_INITIALIZED) {
-            log.warn("[{}] afterPropertiesSet: Module already init! Pass...", name);
+            log.warn("[{}] afterPropertiesSet: Module already init! Pass...", moduleDescription.getName());
             return;
         }
         try {
             initializationState = initialize();
         } catch (Exception e) {
             initializationState = InitializationState.INITIALIZATION_ERROR;
-            log.error("[{}] {}",name, e.getMessage(), e);
+            log.error("[{}] {}", moduleDescription.getName(), e.getMessage(), e);
         } finally {
-            log.info("[{}] afterPropertiesSet: {}", name, initializationState.name());
+            log.info("[{}] afterPropertiesSet: {}", moduleDescription.getName(), initializationState.name());
         }
     }
 
@@ -97,17 +88,17 @@ public abstract class Module<ModuleGroupT extends ModuleGroup, AddressT> impleme
      * Инициализация модуля
      */
     protected InitializationState initialize() throws Exception {
-        if (group instanceof ModuleListReadable) {
-            List<Object> moduleList = ((ModuleListReadable) group).readModuleAdressesList();
+        if (group instanceof ModuleListReadable<?>) {
+            List<?> moduleList = ((ModuleListReadable<?>) group).readModuleAdressesList();
             if (!moduleList.contains(address)) {
-                log.warn("[{}] initialize: module not connected!", name);
+                log.warn("[{}] initialize: module not connected!", moduleDescription.getName());
                 return InitializationState.NOT_CONNECTED;
             }
         }
         if (initializer != null) {
             InitializationState state = initializer.initialize(this);
             if (state != InitializationState.OK) {
-                log.warn("[{}] initialize: module have initialization error!", name);
+                log.warn("[{}] initialize: module have initialization error!", moduleDescription.getName());
             }
             return state;
         }
