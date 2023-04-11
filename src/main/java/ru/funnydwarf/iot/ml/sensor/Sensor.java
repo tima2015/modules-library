@@ -79,6 +79,7 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
         try {
             readMeasurements();
             onTakeMeasurementListeners.forEach(onTakeMeasurementListener -> onTakeMeasurementListener.onTakeMeasurement(measurements));
+            return measurements;
         } catch (Exception e) {
             log.error("[{}] {}", getModuleDescription().getName(), e.getMessage(), e);
         }
