@@ -1,5 +1,6 @@
 package ru.funnydwarf.iot.ml.sensor;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -7,12 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.Objects;
 
-@Entity
+//@Entity
 @Getter
 @ToString
 @NoArgsConstructor
+@Deprecated
 public class MeasurementSession {
 
     @Id
@@ -21,6 +24,10 @@ public class MeasurementSession {
     private String name;
 
     private String description;
+
+    private Date start;
+
+    private Date end;
 
     public MeasurementSession(String name, String description) {
         this.name = name;
@@ -39,4 +46,6 @@ public class MeasurementSession {
     public int hashCode() {
         return Objects.hash(id, name, description);
     }
+
+
 }

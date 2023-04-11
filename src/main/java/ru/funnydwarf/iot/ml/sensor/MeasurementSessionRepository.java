@@ -4,7 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
+@Deprecated
 public interface MeasurementSessionRepository extends CrudRepository<MeasurementSession, Long> {
     @Nullable
     MeasurementSession findFirstByOrderByIdDesc();

@@ -8,13 +8,13 @@ import ru.funnydwarf.iot.ml.ModuleDescription;
 @Repository
 public interface MeasurementDataRepository extends CrudRepository<MeasurementData, Long> {
     @Nullable
-    MeasurementData findByMeasurementDescription_IdAndSession_IdAndModuleDescription_Id(long measurementDescriptionId, long sessionId, long moduleDescriptionId);
+    MeasurementData findByMeasurementDescription_IdAndModuleDescription_Id(long measurementDescriptionId, long moduleDescriptionId);
 
-    static MeasurementData findOrCreate(MeasurementDataRepository mdr, MeasurementDescription measurementDescription, MeasurementSession session, ModuleDescription moduleDescription) {
-        MeasurementData md = mdr.findByMeasurementDescription_IdAndSession_IdAndModuleDescription_Id(measurementDescription.getId(), session.getId(), moduleDescription.getId());
+    static MeasurementData findOrCreate(MeasurementDataRepository mdr, MeasurementDescription measurementDescription, ModuleDescription moduleDescription) {
+        MeasurementData md = mdr.findByMeasurementDescription_IdAndModuleDescription_Id(measurementDescription.getId(), moduleDescription.getId());
 
         if (md == null) {
-            md = mdr.save(new MeasurementData(measurementDescription, session, moduleDescription));
+            md = mdr.save(new MeasurementData(measurementDescription, moduleDescription));
         }
 
         return md;

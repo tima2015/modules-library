@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.prefs.Preferences;
 
-@Component
+//@Component
+@Deprecated
 public class CurrentMeasurementSession {
     @Getter
     private MeasurementSession session;

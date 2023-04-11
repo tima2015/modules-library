@@ -21,14 +21,10 @@ public class MeasurementData {
     private MeasurementDescription measurementDescription;
 
     @ManyToOne
-    private MeasurementSession session;
-
-    @ManyToOne
     private ModuleDescription moduleDescription;
 
-    public MeasurementData(MeasurementDescription measurementDescription, MeasurementSession session, ModuleDescription moduleDescription) {
+    public MeasurementData(MeasurementDescription measurementDescription, ModuleDescription moduleDescription) {
         this.measurementDescription = measurementDescription;
-        this.session = session;
         this.moduleDescription = moduleDescription;
     }
 }

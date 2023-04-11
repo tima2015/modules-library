@@ -3,7 +3,6 @@ package ru.funnydwarf.iot.ml.sensor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.lang.Nullable;
 import ru.funnydwarf.iot.ml.InitializationState;
 import ru.funnydwarf.iot.ml.Module;
@@ -34,13 +33,6 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
 
     private final MeasurementData[] measurementData;
 
-    private final MeasurementDataRepository mdr;
-
-    /**
-     * Контейнер актуальной информации о текущей сессии
-     */
-    private final CurrentMeasurementSession session;
-
     /**
      * Аргументы для читателя
      */
@@ -48,11 +40,9 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
 
     private final List<OnTakeMeasurementListener> onTakeMeasurementListeners = new ArrayList<>();
 
-    public Sensor(Reader<AddressT> reader, MeasurementData[] measurementData, MeasurementDataRepository mdr, CurrentMeasurementSession session, ModuleGroupT group, AddressT address, ModuleDescription moduleDescription, @Nullable Initializer initializer, Object ... readerArgs){
+    public Sensor(Reader<AddressT> reader, MeasurementData[] measurementData, ModuleGroupT group, AddressT address, ModuleDescription moduleDescription, @Nullable Initializer initializer, Object ... readerArgs){
         super(group, address, moduleDescription, initializer);
         this.reader = reader;
-        this.mdr = mdr;
-        this.session = session;
         this.readerArgs = readerArgs;
         this.measurementData = measurementData;
     }
@@ -67,15 +57,6 @@ public class Sensor<ModuleGroupT extends ModuleGroup, AddressT> extends Module<M
             return true;
         }
         return false;
-    }
-
-    private void checkSession() {
-        if (!session.getSession().equals(measurementData[0].getSession())){
-            return;
-        }
-        for (int i = 0; i < measurementData.length; i++) {
-            measurementData[i] = MeasurementDataRepository.findOrCreate(mdr, measurementData[i].getMeasurementDescription(), session.getSession(), measurementData[i].getModuleDescription());
-        }
     }
 
     private void readMeasurements() {
