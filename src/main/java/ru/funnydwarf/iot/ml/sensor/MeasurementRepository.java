@@ -11,4 +11,6 @@ import java.util.List;
 public interface MeasurementRepository extends CrudRepository<Measurement, Long> {
     List<Measurement> findByMeasurementDateBetweenOrderByMeasurementDateAsc(Date measurementDateStart, Date measurementDateEnd, Pageable pageable);
 
+    List<Measurement> findByMeasurementDateBetweenAndMeasurementData_IdOrderByMeasurementDateAsc(Date measurementDateStart, Date measurementDateEnd, long id, Pageable pageable);
+
 }
